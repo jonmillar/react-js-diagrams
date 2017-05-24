@@ -1,10 +1,26 @@
+// libs
 import { createStore, compose, applyMiddleware } from 'redux';
-import * as createLogger from 'redux-logger';
+import createLogger from 'redux-logger';
+
+// src
 import { reducer } from './reducer';
+import { model } from './savedModel';
 
 const logger = createLogger({
-  level: 'info',
   collapsed: true
 });
 
-export const store = applyMiddleware(logger)(compose(createStore))(reducer);
+const preloadedState = {
+  present: {
+    model,
+    selectedNode: null
+  }
+};
+
+export const store = createStore(
+  reducer,
+  preloadedState,
+  applyMiddleware(logger)
+);
+
+window.store = store;
