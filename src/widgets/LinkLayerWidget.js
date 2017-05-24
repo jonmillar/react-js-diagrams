@@ -15,6 +15,7 @@ export class LinkLayerWidget extends React.Component {
         }
         // Remove the link because its problematic (TODO implement this rather at an engine level)
         catch (ex) {
+          console.error('Couldn\'t update link source port location: ', ex);
           diagramModel.removeLink(link);
           return;
         }
@@ -25,6 +26,7 @@ export class LinkLayerWidget extends React.Component {
         }
         //remove the link because its problematic (TODO implement this rather at an engine level)
         catch (ex) {
+          console.error('Couldn\'t update link target port location: ', ex);
           diagramModel.removeLink(link);
           return;
         }
