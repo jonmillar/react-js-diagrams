@@ -10,6 +10,15 @@ import { Controls } from './components/Controls';
 import './demo5.scss';
 
 class Demo extends React.Component {
+	constructor() {
+		super();
+		this.state = {
+			disableInteractionZoom: false
+		}
+	}
+	handleChangeDisableInteractionZoom = ({ target: { checked: disableInteractionZoom } }) => {
+		this.setState({ disableInteractionZoom });
+	}
   render() {
     const { model, selectedNode, onNodeSelected, updateModel, onUndo, onRedo, canUndo, canRedo } = this.props;
 
@@ -18,16 +27,19 @@ class Demo extends React.Component {
     	  <div className='parent-container'>
     	    <NodesPanel />
   	      <Diagram
+						{...this.state}
   	        model={model}
   	        updateModel={updateModel}
   	        onNodeSelected={onNodeSelected}
   	       />
   	      <Controls
+						{...this.state}
   	        selectedNode={selectedNode}
   	        onUndo={onUndo}
   	        onRedo={onRedo}
   	        canUndo={canUndo}
   	        canRedo={canRedo}
+						onChangeDisableInteractionZoom={this.handleChangeDisableInteractionZoom}
   	       />
     	  </div>
   	  </DragDropContextProvider>

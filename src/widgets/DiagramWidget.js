@@ -10,7 +10,8 @@ import { Toolkit } from '../Toolkit';
 export class DiagramWidget extends React.Component {
   static defaultProps = {
     onChange: () => {},
-    makeLinkModel: () => new LinkModel()
+    makeLinkModel: () => new LinkModel(),
+    disableInteractionZoom: false
   };
 
   constructor(props) {
@@ -277,7 +278,10 @@ export class DiagramWidget extends React.Component {
   }
 
   onWheel(event) {
-    const { diagramEngine } = this.props;
+    const { diagramEngine, disableInteractionZoom } = this.props;
+
+    if (disableInteractionZoom) return;
+
     const diagramModel = diagramEngine.getDiagramModel();
     event.preventDefault();
     event.stopPropagation();
