@@ -1,7 +1,14 @@
 # React JS Diagrams
 
-[![npm version](https://img.shields.io/npm/v/react-js-diagrams.svg?style=flat-square)](https://www.npmjs.com/package/react-js-diagrams)
-[![npm downloads](https://img.shields.io/npm/dm/react-js-diagrams.svg?style=flat-square)](https://www.npmjs.com/package/react-js-diagrams)
+This is a fork of [React JS Diagrams](https://github.com/woodenconsulting/react-js-diagrams) which in turn is an ES6/JSX port of [React Diagrams](https://github.com/projectstorm/react-diagrams). Here are the changes made in this fork:
+
+- Added jest as testing framework
+- Integrated [getPort](https://www.npmjs.com/package/get-port) and [opn](https://www.npmjs.com/package/opn) for faster development experience.
+- Created a new demo (demo5) which demostrates loading a pre-saved diagram.
+- **Fixed: [links aren't rendered on page load with a pre-saved model](https://github.com/woodenconsulting/react-js-diagrams/issues/6)**
+- Un-sunk couple of exceptions in `LinkLayerWidget#generateLinks`.
+- **Added a new optional prop `makeLinkModel` to `DiagramWidget` that lets a developer [instantiate their own link model](https://github.com/woodenconsulting/react-js-diagrams/issues/7) when a port is clicked and dragged.**
+- Added `linkType` parameter to `LinkModel` constructor to make it more consistent with rest of the API (like `NodeModel`).
 
 ![Demo](./images/main.png)
 
@@ -10,18 +17,18 @@ A React diagramming libary using lodash as its only additional dependency. Initi
 ## How To Install
 
 ```
-npm install --save react-js-diagrams
+npm install --save emumba-react-diagrams
 ```
 or
 ```
-yarn add react-js-diagrams
+yarn add emumba-react-diagrams
 ```
 
 The above assumes that you are using [npm](http://npmjs.com/) with a module bundler like [Webpack](http://webpack.github.io/) or [Browserify](http://browserify.org/) in order to consume [CommonJS modules](http://webpack.github.io/docs/commonjs.html).
 
 ## Viewing The Examples / Developing
 
-From the repository directory, ensure you've run `npm install` then run `npm start` to spin up the development server and navigate to `http://localhost:3000`.
+From the repository directory, ensure you've run `npm install` then run `npm start`.
 
 Alternatively, you can run `./node_modules/.bin/webpack` from the repository directory to build the demo bundles and run them from the file system.
 
