@@ -95,7 +95,7 @@ export class Diagram extends React.Component {
   }
 
   render() {
-    const { connectDropTarget, disableInteractionZoom } = this.props;
+    const { connectDropTarget, disableInteractionZoom, disableInteractionNodeMove } = this.props;
 
     // Render the canvas
     return connectDropTarget (
@@ -104,7 +104,8 @@ export class Diagram extends React.Component {
           makeLinkModel={() => new WhiteLinkModel()}
           diagramEngine={diagramEngine}
           onChange={this.onChange.bind(this)}
-          disableInteractionZoom={disableInteractionZoom}/>
+          disableInteractionZoom={disableInteractionZoom}
+          disableInteractionNodeMove={disableInteractionNodeMove}/>
       </div>
     );
   }

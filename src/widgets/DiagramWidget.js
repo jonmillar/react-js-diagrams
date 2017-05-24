@@ -11,7 +11,8 @@ export class DiagramWidget extends React.Component {
   static defaultProps = {
     onChange: () => {},
     makeLinkModel: () => new LinkModel(),
-    disableInteractionZoom: false
+    disableInteractionZoom: false,
+    disableInteractionNodeMove: false
   };
 
   constructor(props) {
@@ -291,7 +292,7 @@ export class DiagramWidget extends React.Component {
   }
 
   onMouseMove(event) {
-    const { diagramEngine } = this.props;
+    const { diagramEngine, disableInteractionNodeMove } = this.props;
     const { action, actionType: currentActionType } = this.state;
     const diagramModel = diagramEngine.getDiagramModel();
     const { left, top } = this.refs.canvas.getBoundingClientRect();
@@ -327,7 +328,7 @@ export class DiagramWidget extends React.Component {
     } else if (action instanceof MoveItemsAction) {
       // Translate the items on the canvas
       action.selectionModels.forEach(model => {
-        if (model.model instanceof NodeModel || model.model instanceof PointModel) {
+        if ((model.model instanceof NodeModel && !disableInteractionNodeMove) || model.model instanceof PointModel) {
           model.model.x = model.initialX + (
             (event.pageX - this.state.action.mouseX) / (diagramModel.getZoomLevel() / 100)
           );

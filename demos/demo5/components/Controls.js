@@ -3,7 +3,8 @@ import React from 'react';
 export class Controls extends React.Component {
   render() {
     const { selectedNode, onUndo, onRedo, canUndo, canRedo,
-			disableInteractionZoom, onChangeDisableInteractionZoom
+			disableInteractionZoom, onChangeDisableInteractionZoom,
+			disableInteractionNodeMove, onChangeDisableInteractionNodeMove
 		} = this.props;
     const content = selectedNode ? JSON.stringify(selectedNode.serialize(), null, 2) : '';
 
@@ -14,7 +15,8 @@ export class Controls extends React.Component {
   	      <button onClick={onRedo} disabled={!canRedo}>Redo</button>
   	    </div>
 				<div>
-					<label><input type="checkbox" checked={disableInteractionZoom} onChange={onChangeDisableInteractionZoom}/> disableInteractionZoom</label>
+					<label><input type="checkbox" checked={disableInteractionZoom} onChange={onChangeDisableInteractionZoom}/> disableInteractionZoom</label><br/>
+					<label><input type="checkbox" checked={disableInteractionNodeMove} onChange={onChangeDisableInteractionNodeMove}/> disableInteractionNodeMove</label><br/>
 				</div>
   	    <pre>
   	      {content}
