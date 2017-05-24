@@ -1,9 +1,15 @@
-import path from 'path';
-import fs from 'fs';
-import webpack from 'webpack';
+// libs
 import express from 'express';
+import fs from 'fs';
+import getPort from 'get-port';
+import opn from 'opn';
+import path from 'path';
+import webpack from 'webpack';
 import webpackMiddleware from 'webpack-dev-middleware';
+
+// src
 import webpackHot from 'webpack-hot-middleware';
+
 import config from './webpack.config';
 
 const hotEntries = [
@@ -92,11 +98,15 @@ app.get('/demos/:name', (req, res) => {
 // Redirect unknown routes
 app.get('*', (req, res) => res.redirect('/'));
 
-// Start the server
-app.listen(3000, (err) => {
-  if (err) {
-    return console.error(err);
-  }
+getPort(3000).then(port => {
+  // Start the server
+  app.listen(port, (err) => {
+    if (err) {
+      return console.error(err);
+    }
 
-  console.log('Listening at http://localhost:3000/');
+    const url = `http://localhost:${port}/`;
+    console.log(`Listening at ${url}`);
+    opn(url);
+  });
 });
