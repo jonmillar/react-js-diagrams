@@ -9,7 +9,8 @@ import { Toolkit } from '../Toolkit';
 
 export class DiagramWidget extends React.Component {
   static defaultProps = {
-    onChange: () => {}
+    onChange: () => {},
+    makeLinkModel: () => new LinkModel()
   };
 
   constructor(props) {
@@ -385,7 +386,7 @@ export class DiagramWidget extends React.Component {
     } else if (model.model instanceof PortModel) {
       // This is a port element, we want to drag a link
       const relative = diagramEngine.getRelativeMousePoint(event);
-      const link = new LinkModel();
+      const link = this.props.makeLinkModel();
       link.setSourcePort(model.model);
 
       link.getFirstPoint().updateLocation(relative);

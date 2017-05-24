@@ -5,6 +5,7 @@ import * as RJD from '../../../src/main';
 import { OutputNodeModel } from './nodes/output/OutputNodeModel';
 import { InputNodeModel } from './nodes/input/InputNodeModel';
 import { ConnectionNodeModel } from './nodes/connection/ConnectionNodeModel';
+import { WhiteLinkModel } from './links/white';
 import { diagramEngine } from './Engine';
 
 // Setup the diagram model
@@ -99,7 +100,7 @@ export class Diagram extends React.Component {
     // Render the canvas
     return connectDropTarget (
       <div className='diagram-drop-container'>
-        <RJD.DiagramWidget diagramEngine={diagramEngine} onChange={this.onChange.bind(this)} />
+        <RJD.DiagramWidget makeLinkModel={() => new WhiteLinkModel()} diagramEngine={diagramEngine} onChange={this.onChange.bind(this)} />
       </div>
     );
   }
