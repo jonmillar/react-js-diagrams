@@ -210,18 +210,18 @@ export class DiagramWidget extends React.Component {
   }
 
   selectAll(select) {
-    const { diagramEngine, onChange } = this.props;
+    const { diagramEngine, onChange, disableInteractionNodeSelect, disableInteractionLinkSelect } = this.props;
     const { nodes, links } = diagramEngine.diagramModel;
     const selected = [];
 
     // Select all nodes
-    _.forEach(nodes, node => {
+    !disableInteractionNodeSelect && _.forEach(nodes, node => {
       node.setSelected(select);
       selected.push(node);
     });
 
     // Select all links
-    _.forEach(links, link => {
+    !disableInteractionLinkSelect && _.forEach(links, link => {
       link.setSelected(select);
       // Select all points
       link.points.forEach(point => point.setSelected(select));
@@ -353,7 +353,7 @@ export class DiagramWidget extends React.Component {
       this.setState({ actionType });
     } else if (this.state.action instanceof MoveCanvasAction) {
       if (disableInteractionCanvasMove) return;
-      
+
       // Translate the actual canvas
       diagramModel.setOffset(
         action.initialOffsetX + (
