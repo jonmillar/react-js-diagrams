@@ -293,7 +293,7 @@ export class DiagramWidget extends React.Component {
   }
 
   onMouseMove(event) {
-    const { diagramEngine, disableInteractionNodeMove, disableInteractionNodeSelect } = this.props;
+    const { diagramEngine, disableInteractionNodeMove, disableInteractionNodeSelect, disableInteractionLinkSelect } = this.props;
     const { action, actionType: currentActionType } = this.state;
     const diagramModel = diagramEngine.getDiagramModel();
     const { left, top } = this.refs.canvas.getBoundingClientRect();
@@ -308,7 +308,7 @@ export class DiagramWidget extends React.Component {
         }
       });
 
-      _.forEach(diagramModel.getLinks(), link => {
+      !disableInteractionLinkSelect && _.forEach(diagramModel.getLinks(), link => {
         let allSelected = true;
         link.points.forEach(point => {
           if (action.containsElement(point.x, point.y, diagramModel)) {
@@ -362,7 +362,7 @@ export class DiagramWidget extends React.Component {
   }
 
   onMouseDown(event) {
-    const { diagramEngine, disableInteractionNodeSelect } = this.props;
+    const { diagramEngine, disableInteractionNodeSelect, disableInteractionLinkSelect } = this.props;
     const diagramModel = diagramEngine.getDiagramModel();
     const model = this.getMouseElement(event);
 
@@ -416,7 +416,10 @@ export class DiagramWidget extends React.Component {
       }
 
       // Skip if it's a node and node selection is disabled
-      if (disableInteractionNodeSelect && model.model instanceof NodeModel) return;  
+      if (disableInteractionNodeSelect && model.model instanceof NodeModel) return;
+
+      // Skip if it's a link and link selection is disabled
+      if (disableInteractionLinkSelect && model.model instanceof LinkModel) return;
 
       // Is this a deselect or select?
       if (event.shiftKey && model.model.isSelected()) {
