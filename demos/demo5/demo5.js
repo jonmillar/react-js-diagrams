@@ -14,6 +14,7 @@ class Demo extends React.Component {
 		super();
 		this.state = {
 			disableInteractionZoom: false,
+			disableInteractionCanvasMove: false,
 			disableInteractionNodeMove: false,
 			disableInteractionNodeSelect: false,
 			disableInteractionLinkSelect: false,
@@ -22,6 +23,9 @@ class Demo extends React.Component {
 	}
 	handleChangeDisableInteractionZoom = ({ target: { checked: disableInteractionZoom } }) => {
 		this.setState({ disableInteractionZoom });
+	}
+	handleChangeDisableInteractionCanvasMove = ({ target: { checked: disableInteractionCanvasMove } }) => {
+		this.setState({ disableInteractionCanvasMove });
 	}
 	handleChangeDisableInteractionNodeMove = ({ target: { checked: disableInteractionNodeMove } }) => {
 		this.setState({ disableInteractionNodeMove });
@@ -56,6 +60,7 @@ class Demo extends React.Component {
   	        canUndo={canUndo}
   	        canRedo={canRedo}
 						onChangeDisableInteractionZoom={this.handleChangeDisableInteractionZoom}
+						onChangeDisableInteractionCanvasMove={this.handleChangeDisableInteractionCanvasMove}
 						onChangeDisableInteractionNodeMove={this.handleChangeDisableInteractionNodeMove}
 						onChangeDisableInteractionNodeSelect={this.handleChangeDisableInteractionNodeSelect}
 						onChangeDisableInteractionLinkSelect={this.handleChangeDisableInteractionLinkSelect}

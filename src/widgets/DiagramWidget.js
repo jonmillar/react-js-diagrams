@@ -12,6 +12,7 @@ export class DiagramWidget extends React.Component {
     onChange: () => {},
     makeLinkModel: () => new LinkModel(),
     disableInteractionZoom: false,
+    disableInteractionCanvasMove: false,
     disableInteractionNodeMove: false,
     disableInteractionNodeSelect: false,
     disableInteractionLinkSelect: false,
@@ -295,7 +296,8 @@ export class DiagramWidget extends React.Component {
   }
 
   onMouseMove(event) {
-    const { diagramEngine, disableInteractionNodeMove, disableInteractionNodeSelect, disableInteractionLinkSelect } = this.props;
+    const { diagramEngine, disableInteractionNodeMove, disableInteractionNodeSelect,
+      disableInteractionLinkSelect, disableInteractionCanvasMove } = this.props;
     const { action, actionType: currentActionType } = this.state;
     const diagramModel = diagramEngine.getDiagramModel();
     const { left, top } = this.refs.canvas.getBoundingClientRect();
@@ -350,6 +352,8 @@ export class DiagramWidget extends React.Component {
 
       this.setState({ actionType });
     } else if (this.state.action instanceof MoveCanvasAction) {
+      if (disableInteractionCanvasMove) return;
+      
       // Translate the actual canvas
       diagramModel.setOffset(
         action.initialOffsetX + (

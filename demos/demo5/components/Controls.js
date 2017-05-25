@@ -4,6 +4,7 @@ export class Controls extends React.Component {
   render() {
     const { selectedNode, onUndo, onRedo, canUndo, canRedo,
 			disableInteractionZoom, onChangeDisableInteractionZoom,
+			disableInteractionCanvasMove, onChangeDisableInteractionCanvasMove,
 			disableInteractionNodeMove, onChangeDisableInteractionNodeMove,
 			disableInteractionNodeSelect, onChangeDisableInteractionNodeSelect,
 			disableInteractionLinkSelect, onChangeDisableInteractionLinkSelect,
@@ -19,6 +20,7 @@ export class Controls extends React.Component {
   	    </div>
 				<div>
 					<label><input type="checkbox" checked={disableInteractionZoom} onChange={onChangeDisableInteractionZoom}/> disableInteractionZoom</label><br/>
+					<label><input type="checkbox" checked={disableInteractionCanvasMove} onChange={onChangeDisableInteractionCanvasMove}/> disableInteractionCanvasMove</label><br/>
 					<label><input type="checkbox" checked={disableInteractionNodeMove} onChange={onChangeDisableInteractionNodeMove}/> disableInteractionNodeMove</label><br/>
 					<label><input type="checkbox" checked={disableInteractionNodeSelect} onChange={onChangeDisableInteractionNodeSelect}/> disableInteractionNodeSelect</label><br/>
 					<label><input type="checkbox" checked={disableInteractionLinkSelect} onChange={onChangeDisableInteractionLinkSelect}/> disableInteractionLinkSelect</label><br/>
