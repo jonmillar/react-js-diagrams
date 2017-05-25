@@ -13,7 +13,9 @@ export class DiagramWidget extends React.Component {
     makeLinkModel: () => new LinkModel(),
     disableInteractionZoom: false,
     disableInteractionNodeMove: false,
-    disableInteractionNodeSelect: false
+    disableInteractionNodeSelect: false,
+    disableInteractionLinkSelect: false,
+    disableInteractionLinkCreate: false
   };
 
   constructor(props) {
@@ -362,7 +364,7 @@ export class DiagramWidget extends React.Component {
   }
 
   onMouseDown(event) {
-    const { diagramEngine, disableInteractionNodeSelect, disableInteractionLinkSelect } = this.props;
+    const { diagramEngine, disableInteractionNodeSelect, disableInteractionLinkSelect, disableInteractionLinkCreate } = this.props;
     const diagramModel = diagramEngine.getDiagramModel();
     const model = this.getMouseElement(event);
 
@@ -391,6 +393,8 @@ export class DiagramWidget extends React.Component {
       }
     } else if (model.model instanceof PortModel) {
       // This is a port element, we want to drag a link
+      if (disableInteractionLinkCreate) return;
+
       const relative = diagramEngine.getRelativeMousePoint(event);
       const link = this.props.makeLinkModel();
       link.setSourcePort(model.model);
