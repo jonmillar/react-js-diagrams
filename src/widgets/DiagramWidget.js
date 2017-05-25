@@ -16,7 +16,8 @@ export class DiagramWidget extends React.Component {
     disableInteractionNodeMove: false,
     disableInteractionNodeSelect: false,
     disableInteractionLinkSelect: false,
-    disableInteractionLinkCreate: false
+    disableInteractionLinkCreate: false,
+    disableInteractionNodeCreate: false
   };
 
   constructor(props) {
@@ -105,7 +106,7 @@ export class DiagramWidget extends React.Component {
   }
 
   copySelectedItems(selectedItems) {
-    const { diagramEngine, onChange, disableInteractionLinkCreate } = this.props;
+    const { diagramEngine, onChange, disableInteractionLinkCreate, disableInteractionNodeCreate } = this.props;
 
     // Cannot copy anything without a node, so ensure some are selected
     const nodes = _.filter(selectedItems, item => item instanceof NodeModel);
@@ -128,7 +129,7 @@ export class DiagramWidget extends React.Component {
     const copied = [];
 
     // Iterate the nodes
-    _.forEach(flatModel.nodes, node => {
+    !disableInteractionNodeCreate && _.forEach(flatModel.nodes, node => {
       if (node.selected) {
         // Get the node instance, updated the GUID and deserialize
         const nodeOb = diagramEngine.getInstanceFactory(node._class).getInstance();

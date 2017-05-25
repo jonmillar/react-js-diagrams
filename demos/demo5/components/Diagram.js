@@ -101,7 +101,8 @@ export class Diagram extends React.Component {
       disableInteractionNodeMove,
       disableInteractionNodeSelect,
       disableInteractionLinkSelect,
-      disableInteractionLinkCreate } = this.props;
+      disableInteractionLinkCreate,
+      disableInteractionNodeCreate } = this.props;
 
     // Render the canvas
     return connectDropTarget (
@@ -115,7 +116,8 @@ export class Diagram extends React.Component {
           disableInteractionNodeMove={disableInteractionNodeMove}
           disableInteractionNodeSelect={disableInteractionNodeSelect}
           disableInteractionLinkSelect={disableInteractionLinkSelect}
-          disableInteractionLinkCreate={disableInteractionLinkCreate}/>
+          disableInteractionLinkCreate={disableInteractionLinkCreate}
+          disableInteractionNodeCreate={disableInteractionNodeCreate}/>
       </div>
     );
   }

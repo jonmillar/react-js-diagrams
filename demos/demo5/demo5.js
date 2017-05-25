@@ -18,7 +18,8 @@ class Demo extends React.Component {
 			disableInteractionNodeMove: false,
 			disableInteractionNodeSelect: false,
 			disableInteractionLinkSelect: false,
-			disableInteractionLinkCreate: false
+			disableInteractionLinkCreate: false,
+			disableInteractionNodeCreate: false
 		}
 	}
 	handleChangeDisableInteractionZoom = ({ target: { checked: disableInteractionZoom } }) => {
@@ -38,6 +39,9 @@ class Demo extends React.Component {
 	}
 	handleChangeDisableInteractionLinkCreate = ({ target: { checked: disableInteractionLinkCreate } }) => {
 		this.setState({ disableInteractionLinkCreate });
+	}
+	handleChangeDisableInteractionNodeCreate = ({ target: { checked: disableInteractionNodeCreate } }) => {
+		this.setState({ disableInteractionNodeCreate });
 	}
   render() {
     const { model, selectedNode, onNodeSelected, updateModel, onUndo, onRedo, canUndo, canRedo } = this.props;
@@ -65,6 +69,7 @@ class Demo extends React.Component {
 						onChangeDisableInteractionNodeSelect={this.handleChangeDisableInteractionNodeSelect}
 						onChangeDisableInteractionLinkSelect={this.handleChangeDisableInteractionLinkSelect}
 						onChangeDisableInteractionLinkCreate={this.handleChangeDisableInteractionLinkCreate}
+						onChangeDisableInteractionNodeCreate={this.handleChangeDisableInteractionNodeCreate}
   	       />
     	  </div>
   	  </DragDropContextProvider>

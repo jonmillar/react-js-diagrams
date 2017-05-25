@@ -8,7 +8,8 @@ export class Controls extends React.Component {
 			disableInteractionNodeMove, onChangeDisableInteractionNodeMove,
 			disableInteractionNodeSelect, onChangeDisableInteractionNodeSelect,
 			disableInteractionLinkSelect, onChangeDisableInteractionLinkSelect,
-			disableInteractionLinkCreate, onChangeDisableInteractionLinkCreate
+			disableInteractionLinkCreate, onChangeDisableInteractionLinkCreate,
+			disableInteractionNodeCreate, onChangeDisableInteractionNodeCreate
 		} = this.props;
     const content = selectedNode ? JSON.stringify(selectedNode.serialize(), null, 2) : '';
 
@@ -25,6 +26,7 @@ export class Controls extends React.Component {
 					<label><input type="checkbox" checked={disableInteractionNodeSelect} onChange={onChangeDisableInteractionNodeSelect}/> disableInteractionNodeSelect</label><br/>
 					<label><input type="checkbox" checked={disableInteractionLinkSelect} onChange={onChangeDisableInteractionLinkSelect}/> disableInteractionLinkSelect</label><br/>
 					<label><input type="checkbox" checked={disableInteractionLinkCreate} onChange={onChangeDisableInteractionLinkCreate}/> disableInteractionLinkCreate</label><br/>
+					<label><input type="checkbox" checked={disableInteractionNodeCreate} onChange={onChangeDisableInteractionNodeCreate}/> disableInteractionNodeCreate</label><br/>
 				</div>
   	    <pre>
   	      {content}
