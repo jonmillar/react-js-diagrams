@@ -105,7 +105,7 @@ export class DiagramWidget extends React.Component {
   }
 
   copySelectedItems(selectedItems) {
-    const { diagramEngine, onChange } = this.props;
+    const { diagramEngine, onChange, disableInteractionLinkCreate } = this.props;
 
     // Cannot copy anything without a node, so ensure some are selected
     const nodes = _.filter(selectedItems, item => item instanceof NodeModel);
@@ -151,7 +151,7 @@ export class DiagramWidget extends React.Component {
     });
 
     // Iterate the links
-    _.forEach(flatModel.links, link => {
+    !disableInteractionLinkCreate && _.forEach(flatModel.links, link => {
       if (link.selected) {
         const linkOb = diagramEngine.getInstanceFactory(link._class).getInstance();
         link.id = gMap[link.id] = Toolkit.UID();
