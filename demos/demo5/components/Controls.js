@@ -4,7 +4,8 @@ export class Controls extends React.Component {
   render() {
     const { selectedNode, onUndo, onRedo, canUndo, canRedo,
 			disableInteractionZoom, onChangeDisableInteractionZoom,
-			disableInteractionNodeMove, onChangeDisableInteractionNodeMove
+			disableInteractionNodeMove, onChangeDisableInteractionNodeMove,
+			disableInteractionNodeSelect, onChangeDisableInteractionNodeSelect
 		} = this.props;
     const content = selectedNode ? JSON.stringify(selectedNode.serialize(), null, 2) : '';
 
@@ -17,6 +18,7 @@ export class Controls extends React.Component {
 				<div>
 					<label><input type="checkbox" checked={disableInteractionZoom} onChange={onChangeDisableInteractionZoom}/> disableInteractionZoom</label><br/>
 					<label><input type="checkbox" checked={disableInteractionNodeMove} onChange={onChangeDisableInteractionNodeMove}/> disableInteractionNodeMove</label><br/>
+					<label><input type="checkbox" checked={disableInteractionNodeSelect} onChange={onChangeDisableInteractionNodeSelect}/> disableInteractionNodeSelect</label><br/>
 				</div>
   	    <pre>
   	      {content}

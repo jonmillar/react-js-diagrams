@@ -12,7 +12,8 @@ export class DiagramWidget extends React.Component {
     onChange: () => {},
     makeLinkModel: () => new LinkModel(),
     disableInteractionZoom: false,
-    disableInteractionNodeMove: false
+    disableInteractionNodeMove: false,
+    disableInteractionNodeSelect: false
   };
 
   constructor(props) {
@@ -292,7 +293,7 @@ export class DiagramWidget extends React.Component {
   }
 
   onMouseMove(event) {
-    const { diagramEngine, disableInteractionNodeMove } = this.props;
+    const { diagramEngine, disableInteractionNodeMove, disableInteractionNodeSelect } = this.props;
     const { action, actionType: currentActionType } = this.state;
     const diagramModel = diagramEngine.getDiagramModel();
     const { left, top } = this.refs.canvas.getBoundingClientRect();
@@ -301,7 +302,7 @@ export class DiagramWidget extends React.Component {
     if (action instanceof SelectingAction) {
       const relative = diagramEngine.getRelativePoint(event.pageX, event.pageY);
 
-      _.forEach(diagramModel.getNodes(), node => {
+      !disableInteractionNodeSelect && _.forEach(diagramModel.getNodes(), node => {
         if (action.containsElement(node.x, node.y, diagramModel)) {
           node.setSelected(true);
         }
@@ -361,7 +362,7 @@ export class DiagramWidget extends React.Component {
   }
 
   onMouseDown(event) {
-    const { diagramEngine } = this.props;
+    const { diagramEngine, disableInteractionNodeSelect } = this.props;
     const diagramModel = diagramEngine.getDiagramModel();
     const model = this.getMouseElement(event);
 
@@ -414,6 +415,9 @@ export class DiagramWidget extends React.Component {
         diagramModel.clearSelection(false, true);
       }
 
+      // Skip if it's a node and node selection is disabled
+      if (disableInteractionNodeSelect && model.model instanceof NodeModel) return;  
+
       // Is this a deselect or select?
       if (event.shiftKey && model.model.isSelected()) {
         model.model.setSelected(false);
@@ -428,19 +432,19 @@ export class DiagramWidget extends React.Component {
       const filtered = _.filter(selected, item => !(item instanceof PointModel));
       const isLink = model.model instanceof LinkModel;
       const isNode = model.model instanceof NodeModel;
-      const isPoint = model.model instanceof PointModel;
+      const isPoint = model.model instanceof PointModel;    
 
       // Determine action type
       let actionType = 'items-selected';
       if (deselect && isLink) {
         actionType = 'link-deselected';
-      } else if (deselect && isNode) {
+      } else if (deselect && isNode && !disableInteractionNodeSelect) {
         actionType = 'node-deselected';
       } else if (deselect && isPoint) {
         actionType = 'point-deselected';
       } else if ((selected.length === 1 || selected.length === 2 && filtered.length === 1) && isLink) {
         actionType = 'link-selected';
-      } else if (selected.length === 1 && isNode) {
+      } else if (selected.length === 1 && isNode && !disableInteractionNodeSelect) {
         actionType = 'node-selected';
       } else if (selected.length === 1 && isPoint) {
         actionType = 'point-selected';

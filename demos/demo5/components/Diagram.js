@@ -95,7 +95,7 @@ export class Diagram extends React.Component {
   }
 
   render() {
-    const { connectDropTarget, disableInteractionZoom, disableInteractionNodeMove } = this.props;
+    const { connectDropTarget, disableInteractionZoom, disableInteractionNodeMove, disableInteractionNodeSelect } = this.props;
 
     // Render the canvas
     return connectDropTarget (
@@ -105,7 +105,8 @@ export class Diagram extends React.Component {
           diagramEngine={diagramEngine}
           onChange={this.onChange.bind(this)}
           disableInteractionZoom={disableInteractionZoom}
-          disableInteractionNodeMove={disableInteractionNodeMove}/>
+          disableInteractionNodeMove={disableInteractionNodeMove}
+          disableInteractionNodeSelect={disableInteractionNodeSelect}/>
       </div>
     );
   }
