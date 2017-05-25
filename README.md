@@ -2,13 +2,22 @@
 
 This is a fork of [React JS Diagrams](https://github.com/woodenconsulting/react-js-diagrams) which in turn is an ES6/JSX port of [React Diagrams](https://github.com/projectstorm/react-diagrams). Here are the changes made in this fork:
 
-- Added jest as testing framework
-- Integrated [getPort](https://www.npmjs.com/package/get-port) and [opn](https://www.npmjs.com/package/opn) for faster development experience.
-- Created a new demo (demo5) which demostrates loading a pre-saved diagram.
 - **Fixed: [links aren't rendered on page load with a pre-saved model](https://github.com/woodenconsulting/react-js-diagrams/issues/6)**
-- Un-sunk couple of exceptions in `LinkLayerWidget#generateLinks`.
 - **Added a new optional prop `makeLinkModel` to `DiagramWidget` that lets a developer [instantiate their own link model](https://github.com/woodenconsulting/react-js-diagrams/issues/7) when a port is clicked and dragged.**
+- **Added following props to `DiagramWidget` for disabling certain interactions:**
+  - `disableInteractionZoom`
+  - `disableInteractionCanvasMove`
+  - `disableInteractionNodeSelect`
+  - `disableInteractionNodeMove`
+  - `disableInteractionNodeCreate`
+  - `disableInteractionLinkSelect`
+  - `disableInteractionLinkMove`
+  - `disableInteractionLinkCreate`
+- Created a new demo (demo5) which demostrates all above changes.
 - Added `linkType` parameter to `LinkModel` constructor to make it more consistent with rest of the API (like `NodeModel`).
+- Integrated [getPort](https://www.npmjs.com/package/get-port) and [opn](https://www.npmjs.com/package/opn) for faster development experience.
+- Un-sunk couple of exceptions in `LinkLayerWidget#generateLinks`.
+- Added jest as testing framework
 
 ![Demo](./images/main.png)
 
