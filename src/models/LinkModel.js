@@ -1,8 +1,18 @@
+/* @flow */
+
+// src
 import { BaseModel } from './BaseModel';
 import { PointModel } from './PointModel';
+import type { PortModel } from './PortModel';
 
 export class LinkModel extends BaseModel {
-  constructor(linkType = 'default') {
+  linkType: string;
+  points: Array<PointModel>;
+  extras: {};
+  sourcePort: PortModel|null;
+  targetPort: PortModel|null;
+
+  constructor(linkType:string = 'default') {
     super();
     this.linkType = linkType;
     this.points = this.getDefaultPoints();
@@ -11,7 +21,8 @@ export class LinkModel extends BaseModel {
     this.targetPort = null;
   }
 
-  deSerialize(ob) {
+  // $FlowFixMe
+  deSerialize(ob:{id: string, type: string, points: Array<PointModel>}) {
     super.deSerialize(ob);
     this.linkType = ob.type;
     this.points = ob.points.map(point => {
@@ -22,9 +33,11 @@ export class LinkModel extends BaseModel {
   }
 
   serialize() {
+    // $FlowFixMe
     return {
       ...super.serialize(),
       type: this.linkType,
+      // $FlowFixMe
       source: this.sourcePort ? this.sourcePort.getParent().id : null,
       sourcePort: this.sourcePort ? this.sourcePort.id : null,
       target: this.targetPort ? this.targetPort.getParent().id : null,
@@ -44,7 +57,7 @@ export class LinkModel extends BaseModel {
     }
   }
 
-  isLastPoint(point) {
+  isLastPoint(point:PointModel) {
     return this.getPointIndex(point) === this.points.length - 1;
   }
 
@@ -55,11 +68,11 @@ export class LinkModel extends BaseModel {
     ];
   }
 
-  getPointIndex(point) {
+  getPointIndex(point:PointModel) {
     return this.points.indexOf(point);
   }
 
-  getPointModel(id) {
+  getPointModel(id:number) {
     for (let i = 0; i < this.points.length; i++) {
       if (this.points[i].id === id) {
         return this.points[i];
@@ -76,7 +89,7 @@ export class LinkModel extends BaseModel {
     return this.points[this.points.length - 1];
   }
 
-  setSourcePort(port) {
+  setSourcePort(port:PortModel) {
     port.addLink(this);
     this.sourcePort = port;
   }
@@ -89,7 +102,7 @@ export class LinkModel extends BaseModel {
     return this.targetPort;
   }
 
-  setTargetPort(port) {
+  setTargetPort(port:PortModel) {
     port.addLink(this);
     this.targetPort = port;
   }
@@ -98,15 +111,15 @@ export class LinkModel extends BaseModel {
     return this.points;
   }
 
-  setPoints(points) {
+  setPoints(points:Array<PointModel>) {
     this.points = points;
   }
 
-  removePoint(pointModel) {
+  removePoint(pointModel:PointModel) {
     this.points.splice(this.getPointIndex(pointModel), 1);
   }
 
-  addPoint(pointModel, index = 1) {
+  addPoint(pointModel:PointModel, index:number = 1) {
     this.points.splice(index, 0, pointModel);
   }
 

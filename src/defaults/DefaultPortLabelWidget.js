@@ -1,4 +1,9 @@
+/* @flow */
+
+// libs
 import React from 'react';
+
+// src
 import { PortWidget } from '../widgets/PortWidget';
 
 export class DefaultPortLabel extends React.Component {

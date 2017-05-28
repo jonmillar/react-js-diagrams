@@ -1,15 +1,25 @@
-import { BaseModel } from './BaseModel';
+/* @flow */
+
+// libs
 import _ from 'lodash';
 
+// src
+import { BaseModel } from './BaseModel';
+import { LinkModel } from './LinkModel';
+
 export class PointModel extends BaseModel {
-  constructor(link, points) {
+  x: number;
+  y:number;
+  link: LinkModel;
+
+  constructor(link:LinkModel, points:{|x:number, y:number|}) {
     super();
     this.x = points.x;
     this.y = points.y;
     this.link = link;
   }
 
-  deSerialize(ob) {
+  deSerialize(ob:Object) {
     super.deSerialize(ob);
     this.x = ob.x;
     this.y = ob.y;
@@ -32,7 +42,7 @@ export class PointModel extends BaseModel {
     }
   }
 
-  updateLocation(points) {
+  updateLocation(points:{|x: number, y: number|}) {
     this.x = points.x;
     this.y = points.y;
   }

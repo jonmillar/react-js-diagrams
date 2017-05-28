@@ -1,5 +1,10 @@
+/* @flow */
+
+// libs
 import React from 'react';
 import _ from 'lodash';
+
+// src
 import { NodeWidget } from './NodeWidget';
 
 export class NodeLayerWidget extends React.Component {

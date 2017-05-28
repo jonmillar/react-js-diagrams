@@ -1,24 +1,41 @@
-import { BaseModel } from './BaseModel';
+/* @flow */
+
+// libs
 import _ from 'lodash';
 
+// src
+import { BaseModel } from './BaseModel';
+import type { NodeModel } from './NodeModel';
+import type { LinkModel } from './LinkModel';
+
 export class PortModel extends BaseModel {
-  constructor(name) {
+  name: string;
+  links: {[string]: LinkModel};
+  parentNode: NodeModel|null;
+
+  constructor(name:string) {
     super();
     this.name = name;
     this.links = {};
     this.parentNode = null;
   }
 
-  deSerialize(ob) {
+  deSerialize(ob:Object) {
     super.deSerialize(ob);
     this.name = ob.name;
   }
 
   serialize() {
+    let parentNodeId = '';
+
+    if ( this.parentNode !== null ) {
+      parentNodeId = this.parentNode.id;
+    }
+
     return {
       ...super.serialize(),
       name: this.name,
-      parentNode: this.parentNode.id,
+      parentNode: parentNodeId,
       links: _.map(this.links, link => link.id)
     };
   }
@@ -31,15 +48,15 @@ export class PortModel extends BaseModel {
     return this.parentNode;
   }
 
-  setParentNode(node) {
+  setParentNode(node:NodeModel|null) {
     this.parentNode = node;
   }
 
-  removeLink(link) {
+  removeLink(link:LinkModel) {
     delete this.links[link.getID()];
   }
 
-  addLink(link) {
+  addLink(link:LinkModel) {
     this.links[link.getID()] = link;
   }
 

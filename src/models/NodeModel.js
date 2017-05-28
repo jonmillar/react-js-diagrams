@@ -1,8 +1,20 @@
-import { BaseModel } from './BaseModel';
+/* @flow */
+
+// libs
 import _ from 'lodash';
 
+// src
+import { BaseModel } from './BaseModel';
+import type { PortModel } from './PortModel';
+
 export class NodeModel extends BaseModel {
-  constructor(nodeType = 'default') {
+  nodeType: string;
+  ports: {[string]: PortModel};
+  extras: {};
+  x: number;
+  y: number;
+
+  constructor(nodeType:string = 'default') {
     super();
     this.nodeType = nodeType;
     this.x = 0;
@@ -11,7 +23,7 @@ export class NodeModel extends BaseModel {
     this.ports = {};
   }
 
-  deSerialize(ob) {
+  deSerialize(ob:Object) {
     super.deSerialize(ob);
     this.nodeType = ob.type;
     this.x = ob.x;
@@ -20,6 +32,7 @@ export class NodeModel extends BaseModel {
   }
 
   serialize() {
+    // $FlowFixMe
     return {
       ...super.serialize(),
       type: this.nodeType,
@@ -37,7 +50,7 @@ export class NodeModel extends BaseModel {
     }
   }
 
-  getPortFromID(id) {
+  getPortFromID(id:number) {
     for (const key in this.ports) {
       if (this.ports[key].id === id) {
         return this.ports[key];
@@ -46,7 +59,7 @@ export class NodeModel extends BaseModel {
     return null;
   }
 
-  getPort(name) {
+  getPort(name:string) {
     return this.ports[name];
   }
 
@@ -54,7 +67,7 @@ export class NodeModel extends BaseModel {
     return this.ports;
   }
 
-  removePort(port) {
+  removePort(port:PortModel) {
     // Clear the parent node reference
     if (this.ports[port.name]) {
       this.ports[port.name].setParentNode(null);
@@ -62,7 +75,7 @@ export class NodeModel extends BaseModel {
     }
   }
 
-  addPort(port) {
+  addPort(port:PortModel) {
     port.setParentNode(this);
     this.ports[port.name] = port;
     return port;

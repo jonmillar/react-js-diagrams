@@ -1,17 +1,23 @@
+/* @flow */
+
 import { BaseEntity } from '../BaseEntity';
 
 export class BaseModel extends BaseEntity {
+  selected: boolean;
+
   constructor() {
     super();
     this.selected = false;
   }
 
-  deSerialize(ob) {
+  // $FlowFixMe
+  deSerialize(ob:{id: string, selected: boolean}):void {
     super.deSerialize(ob);
     this.selected = ob.selected;
   }
 
   serialize() {
+    // $FlowFixMe
     return {
       ...super.serialize(),
       _class: this.constructor.name,
@@ -27,7 +33,7 @@ export class BaseModel extends BaseEntity {
     return this.selected;
   }
 
-  setSelected(selected) {
+  setSelected(selected:boolean):void {
     this.selected = selected;
     this.itterateListeners(listener => {
       if (listener.selectionChanged) {

@@ -1,9 +1,22 @@
+/* @flow */
+
+// libs
 import _ from 'lodash';
+
+// src
 import { LinkModel } from './LinkModel';
 import { NodeModel } from './NodeModel';
 import { BaseEntity } from '../BaseEntity';
+import type { DiagramEngine } from '../DiagramEngine';
 
 export class DiagramModel extends BaseEntity {
+  links: {};
+  nodes: {};
+  offsetX: number;
+  offsetY: number;
+  zoom: number;
+  rendered: boolean;
+
   constructor() {
     super();
     this.links = {};
@@ -14,7 +27,7 @@ export class DiagramModel extends BaseEntity {
     this.rendered = false;
   }
 
-  deSerializeDiagram(object, diagramEngine) {
+  deSerializeDiagram(object:Object, diagramEngine:DiagramEngine) {
     this.deSerialize(object);
     this.offsetX = object.offsetX;
     this.offsetY = object.offsetY;
@@ -41,11 +54,19 @@ export class DiagramModel extends BaseEntity {
       linkOb.deSerialize(link);
 
       if (link.target) {
-        linkOb.setTargetPort(this.getNode(link.target).getPortFromID(link.targetPort));
+        const node = this.getNode(link.target);
+
+        if ( node ) {
+          linkOb.setTargetPort(node.getPortFromID(link.targetPort));
+        }
       }
 
       if (link.source) {
-        linkOb.setSourcePort(this.getNode(link.source).getPortFromID(link.sourcePort));
+        const node = this.getNode(link.source);
+
+        if ( node ) {
+          linkOb.setSourcePort(node.getPortFromID(link.sourcePort));
+        }
       }
 
       this.addLink(linkOb);
@@ -63,7 +84,7 @@ export class DiagramModel extends BaseEntity {
     };
   }
 
-  clearSelection(ignore, supressListener) {
+  clearSelection(ignore?:BaseEntity|false, supressListener?:boolean) {
     _.forEach(this.getSelectedItems(), element => {
       if (ignore && ignore.getID() === element.getID()) {
         return;
@@ -91,7 +112,7 @@ export class DiagramModel extends BaseEntity {
     ];
   }
 
-  setZoomLevel(zoom) {
+  setZoomLevel(zoom:number) {
     this.zoom = zoom;
     this.itterateListeners(listener => {
       if (listener.controlsUpdated) {
@@ -100,7 +121,7 @@ export class DiagramModel extends BaseEntity {
     });
   }
 
-  setOffset(offsetX, offsetY) {
+  setOffset(offsetX:number, offsetY:number) {
     this.offsetX = offsetX;
     this.offsetY = offsetY;
     this.itterateListeners(listener => {
@@ -110,7 +131,7 @@ export class DiagramModel extends BaseEntity {
     });
   }
 
-  setOffsetX(offsetX) {
+  setOffsetX(offsetX:number) {
     this.offsetX = offsetX;
     this.itterateListeners(listener => {
       if (listener.controlsUpdated) {
@@ -119,7 +140,7 @@ export class DiagramModel extends BaseEntity {
     });
   }
 
-  setOffsetY(offsetY) {
+  setOffsetY(offsetY:number) {
     this.offsetX = offsetY;
     this.itterateListeners(listener => {
       if (listener.controlsUpdated) {
@@ -140,7 +161,7 @@ export class DiagramModel extends BaseEntity {
     return this.zoom;
   }
 
-  getNode(node) {
+  getNode(node:NodeModel|string) {
     if (node instanceof NodeModel) {
       return node;
     }
@@ -150,7 +171,7 @@ export class DiagramModel extends BaseEntity {
     return this.nodes[node];
   }
 
-  getLink(link) {
+  getLink(link:LinkModel|string) {
     if (link instanceof LinkModel) {
       return link;
     }
@@ -160,7 +181,7 @@ export class DiagramModel extends BaseEntity {
     return this.links[link];
   }
 
-  addLink(link) {
+  addLink(link:LinkModel):LinkModel {
     link.addListener({
       entityRemoved: () => {
         this.removeLink(link);
@@ -175,7 +196,7 @@ export class DiagramModel extends BaseEntity {
     return link;
   }
 
-  addNode(node) {
+  addNode(node:NodeModel):NodeModel {
     node.addListener({
       entityRemoved: () => {
         this.removeNode(node);
@@ -190,7 +211,7 @@ export class DiagramModel extends BaseEntity {
     return node;
   }
 
-  removeLink(link) {
+  removeLink(link:LinkModel):void {
     if (link instanceof LinkModel) {
       delete this.links[link.getID()];
       this.itterateListeners(listener => {
@@ -208,7 +229,7 @@ export class DiagramModel extends BaseEntity {
     });
   }
 
-  removeNode(node) {
+  removeNode(node:NodeModel):void {
     if (node instanceof NodeModel) {
       delete this.nodes[node.getID()];
       this.itterateListeners(listener => {
@@ -227,7 +248,7 @@ export class DiagramModel extends BaseEntity {
     });
   }
 
-  nodeSelected(node) {
+  nodeSelected(node:NodeModel|{model:NodeModel, element:HTMLElement}):void {
     this.itterateListeners(listener => {
       if (listener.selectionChanged) {
         listener.selectionChanged(node);

@@ -1,4 +1,7 @@
-import { PortModel } from '../models';
+/* @flow */
+
+// src
+import { PortModel } from '../models/PortModel';
 import { AbstractInstanceFactory } from '../AbstractInstanceFactory';
 
 export class DefaultPortInstanceFactory extends AbstractInstanceFactory {
@@ -12,13 +15,16 @@ export class DefaultPortInstanceFactory extends AbstractInstanceFactory {
 }
 
 export class DefaultPortModel extends PortModel {
-  constructor(isInput, name, label = null) {
+  in: boolean;
+  label:? string|null;
+
+  constructor(isInput:boolean, name:string, label:string|null = null) {
     super(name);
     this.in = isInput;
     this.label = label || name;
   }
 
-  deSerialize(object) {
+  deSerialize(object:{in: boolean, label?: string}) {
     super.deSerialize(object);
     this.in = object.in;
     this.label = object.label;

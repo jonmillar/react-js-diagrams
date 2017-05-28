@@ -1,3 +1,6 @@
+/* @flow */
+
+// libs
 import React from 'react';
 
 export class LinkWidget extends React.Component {

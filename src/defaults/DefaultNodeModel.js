@@ -1,5 +1,10 @@
+/* @flow */
+
+// libs
 import _ from 'lodash';
-import { NodeModel } from '../models';
+
+// src
+import { NodeModel } from '../models/NodeModel';
 import { AbstractInstanceFactory } from '../AbstractInstanceFactory';
 
 export class DefaultNodeInstanceFactory extends AbstractInstanceFactory {
@@ -13,13 +18,16 @@ export class DefaultNodeInstanceFactory extends AbstractInstanceFactory {
 }
 
 export class DefaultNodeModel extends NodeModel {
-  constructor(name = 'Untitled', color = 'rgb(0,192,255)') {
+  name: string;
+  color: string;
+
+  constructor(name:string = 'Untitled', color:string = 'rgb(0,192,255)') {
     super('default');
     this.name = name;
     this.color = color;
   }
 
-  deSerialize(object) {
+  deSerialize(object:Object) {
     super.deSerialize(object);
     this.name = object.name;
     this.color = object.color;

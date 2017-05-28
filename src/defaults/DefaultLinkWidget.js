@@ -1,7 +1,32 @@
-import React from 'react';
-import { PointModel } from '../models';
+/* @flow */
 
-export class DefaultLinkWidget extends React.Component {
+// libs
+import React from 'react';
+
+// src
+import { PointModel } from '../models/PointModel';
+import { DiagramEngine } from '../DiagramEngine';
+import type { LinkModel } from '../models/LinkModel';
+
+type DefaultProps = {
+
+};
+
+type Props = {
+  color?: string,
+  width?: number,
+  link: LinkModel,
+  engine?: DiagramEngine,
+  smooth?: boolean,
+  diagramEngine: DiagramEngine,
+  pointAdded?: Function
+};
+
+type State = {
+  selected: boolean
+};
+
+export class DefaultLinkWidget extends React.Component<DefaultProps, Props, State> {
   static defaultProps = {
     color: 'black',
     width: 3,
@@ -11,14 +36,15 @@ export class DefaultLinkWidget extends React.Component {
     diagramEngine: null
   };
 
-  constructor(props) {
+  state = {
+    selected: false
+  };
+
+  constructor(props:Object) {
     super(props);
-    this.state = {
-      selected: false
-    };
   }
 
-  generatePoint(pointIndex) {
+  generatePoint(pointIndex:number):React$Element<*> {
     const { link } = this.props;
     const uiCircleProps = {
       className: `point pointui${(link.points[pointIndex].isSelected() ? ' selected' : '')}`,
@@ -46,7 +72,7 @@ export class DefaultLinkWidget extends React.Component {
     );
   }
 
-  generateLink(extraProps) {
+  generateLink(extraProps:Object):React$Element<*> {
     const { link, width, color } = this.props;
     const { selected } = this.state;
     const bottom = (
@@ -109,7 +135,7 @@ export class DefaultLinkWidget extends React.Component {
           point.setSelected(true);
           this.forceUpdate();
           link.addPoint(point, 1);
-          pointAdded(point, event);
+          pointAdded && pointAdded(point, event);
         }
       },
       d: ` M${pointLeft.x} ${pointLeft.y} C${pointLeft.x + margin} ${pointLeft.y} ${pointRight.x - margin} ${pointRight.y} ${pointRight.x} ${pointRight.y}` // eslint-disable-line
@@ -157,7 +183,7 @@ export class DefaultLinkWidget extends React.Component {
           point.setSelected(true);
           this.forceUpdate();
           link.addPoint(point, index + 1);
-          pointAdded(point, event);
+          pointAdded && pointAdded(point, event);
         }
       }
     }));

@@ -1,5 +1,10 @@
+/* @flow */
+
+// libs
 import React from 'react';
 import _ from 'lodash';
+
+// src
 import { LinkWidget } from './LinkWidget';
 
 export class LinkLayerWidget extends React.Component {

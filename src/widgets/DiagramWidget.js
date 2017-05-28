@@ -1,12 +1,56 @@
+/* @flow */
+
+// libs
 import React from 'react';
 import _ from 'lodash';
-import { DiagramModel, PointModel, NodeModel, LinkModel, PortModel } from '../models';
+import get from 'lodash/get';
+
+// src
+import { DiagramModel } from '../models/DiagramModel';
+import { PointModel } from '../models/PointModel';
+import { NodeModel } from '../models/NodeModel';
+import { LinkModel } from '../models/LinkModel';
+import { PortModel } from '../models/PortModel';
 import { SelectingAction, MoveCanvasAction, MoveItemsAction } from './actions';
 import { LinkLayerWidget } from './LinkLayerWidget';
 import { NodeLayerWidget } from './NodeLayerWidget';
 import { Toolkit } from '../Toolkit';
 
-export class DiagramWidget extends React.Component {
+import type { DiagramEngine } from '../DiagramEngine';
+import type { BaseModel } from '../models/BaseModel';
+
+type CustomMouseEvent = SyntheticMouseEvent & {
+  target: EventTarget & {
+    closest: Function
+  }
+};
+
+type DefaultProps = {
+
+};
+
+type Props = {
+  onChange: Function,
+  makeLinkModel: Function,
+  disableInteractionZoom: boolean,
+  disableInteractionCanvasMove: boolean,
+  disableInteractionNodeMove: boolean,
+  disableInteractionNodeSelect: boolean,
+  disableInteractionLinkSelect: boolean,
+  disableInteractionLinkCreate: boolean,
+  disableInteractionNodeCreate: boolean,
+  diagramEngine: DiagramEngine
+};
+
+type State = {
+  action: null,
+  actionType: string,
+  renderedNodes: boolean,
+  windowListener: Function|null,
+  clipboard: DiagramModel|null
+};
+
+export class DiagramWidget extends React.Component<DefaultProps, Props, State> {
   static defaultProps = {
     onChange: () => {},
     makeLinkModel: () => new LinkModel(),
@@ -19,15 +63,17 @@ export class DiagramWidget extends React.Component {
     disableInteractionNodeCreate: false
   };
 
-  constructor(props) {
+  state = {
+    action: null,
+    actionType: 'unknown',
+    renderedNodes: false,
+    windowListener: null,
+    clipboard: null,
+    windowListener: null
+  };
+
+  constructor(props:Object) {
     super(props);
-    this.state = {
-      action: null,
-      actionType: 'unknown',
-      renderedNodes: false,
-      windowListener: null,
-      clipboard: null
-    };
   }
 
   componentWillUnmount() {
@@ -35,7 +81,7 @@ export class DiagramWidget extends React.Component {
     window.removeEventListener('keydown', this.state.windowListener);
   }
 
-  componentWillUpdate(nextProps) {
+  componentWillUpdate(nextProps:Props) {
     if (this.props.diagramEngine.diagramModel.id !== nextProps.diagramEngine.diagramModel.id) {
       this.setState({ renderedNodes: false });
       nextProps.diagramEngine.diagramModel.rendered = true;
@@ -104,7 +150,7 @@ export class DiagramWidget extends React.Component {
     window.focus();
   }
 
-  copySelectedItems(selectedItems) {
+  copySelectedItems(selectedItems:Array<BaseModel>) {
     const { diagramEngine, onChange, disableInteractionLinkCreate, disableInteractionNodeCreate } = this.props;
 
     // Cannot copy anything without a node, so ensure some are selected
@@ -167,12 +213,20 @@ export class DiagramWidget extends React.Component {
 
         // Only add the target if the node was copied and the target exists
         if (gMap[link.target] && gMap[link.source]) {
-          linkOb.setTargetPort(newModel.getNode(gMap[link.target]).getPortFromID(gMap[link.targetPort]));
+          const node = newModel.getNode(gMap[link.target]);
+          
+          if ( node === null ) return;
+
+          linkOb.setTargetPort(node.getPortFromID(gMap[link.targetPort]));
         }
 
         // Add the source if it exists
         if (gMap[link.source]) {
-          linkOb.setSourcePort(newModel.getNode(gMap[link.source]).getPortFromID(gMap[link.sourcePort]));
+          const node = newModel.getNode(gMap[link.source]);
+
+          if ( node === null ) return;
+
+          linkOb.setSourcePort(node.getPortFromID(gMap[link.sourcePort]));
           newModel.addLink(linkOb);
           copied.push(linkOb);
         }
@@ -193,14 +247,14 @@ export class DiagramWidget extends React.Component {
     this.forceUpdate();
 
     // Add the nodes to the existing diagramModel
-    _.forEach(clipboard.nodes, node => {
+    _.forEach(get(clipboard, 'nodes', []), node => {
       diagramEngine.diagramModel.addNode(node);
       pasted.push(node);
     });
     this.forceUpdate();
 
     // Add links to the existing diagramModel
-    _.forEach(clipboard.links, link => {
+    _.forEach(get(clipboard, 'links', []), link => {
       diagramEngine.diagramModel.addLink(link);
       pasted.push(link);
     });
@@ -209,7 +263,7 @@ export class DiagramWidget extends React.Component {
     onChange(diagramEngine.getDiagramModel().serializeDiagram(), { type: 'items-pasted', items: pasted });
   }
 
-  selectAll(select) {
+  selectAll(select:boolean) {
     const { diagramEngine, onChange, disableInteractionNodeSelect, disableInteractionLinkSelect } = this.props;
     const { nodes, links } = diagramEngine.diagramModel;
     const selected = [];
@@ -238,7 +292,7 @@ export class DiagramWidget extends React.Component {
   /**
    * Gets a model and element under the mouse cursor
    */
-  getMouseElement(event) {
+  getMouseElement(event:CustomMouseEvent):{model: BaseModel, element: HTMLElement}|null {
     const { diagramModel } = this.props.diagramEngine;
     const { target } = event;
 
@@ -282,7 +336,7 @@ export class DiagramWidget extends React.Component {
     return null;
   }
 
-  onWheel(event) {
+  onWheel(event:WheelEvent) {
     const { diagramEngine, disableInteractionZoom } = this.props;
 
     if (disableInteractionZoom) return;
@@ -295,7 +349,7 @@ export class DiagramWidget extends React.Component {
     this.forceUpdate();
   }
 
-  onMouseMove(event) {
+  onMouseMove(event:MouseEvent) {
     const { diagramEngine, disableInteractionNodeMove, disableInteractionNodeSelect,
       disableInteractionLinkSelect, disableInteractionCanvasMove } = this.props;
     const { action, actionType: currentActionType } = this.state;
@@ -335,10 +389,10 @@ export class DiagramWidget extends React.Component {
       action.selectionModels.forEach(model => {
         if ((model.model instanceof NodeModel && !disableInteractionNodeMove) || model.model instanceof PointModel) {
           model.model.x = model.initialX + (
-            (event.pageX - this.state.action.mouseX) / (diagramModel.getZoomLevel() / 100)
+            (event.pageX - get(this, 'state.action.mouseX', 0)) / (diagramModel.getZoomLevel() / 100)
           );
           model.model.y = model.initialY + (
-            (event.pageY - this.state.action.mouseY) / (diagramModel.getZoomLevel() / 100)
+            (event.pageY - get(this, 'state.action.mouseY', 0)) / (diagramModel.getZoomLevel() / 100)
           );
         }
       });
@@ -356,21 +410,21 @@ export class DiagramWidget extends React.Component {
 
       // Translate the actual canvas
       diagramModel.setOffset(
-        action.initialOffsetX + (
-          (event.pageX - left - this.state.action.mouseX) / (diagramModel.getZoomLevel() / 100)
+        get(action, 'initialOffsetX', 0) + (
+          (event.pageX - left - get(this, 'state.action.mouseX', 0)) / (diagramModel.getZoomLevel() / 100)
         ),
-        action.initialOffsetY + (
-          (event.pageY - top - this.state.action.mouseY) / (diagramModel.getZoomLevel() / 100)
+        get(action, 'initialOffsetY', 0) + (
+          (event.pageY - top - get(this, 'state.action.mouseY', 0)) / (diagramModel.getZoomLevel() / 100)
         )
       );
       this.setState({ action, actionType: 'canvas-drag' });
     }
   }
 
-  onMouseDown(event) {
+  onMouseDown(event:CustomMouseEvent) {
     const { diagramEngine, disableInteractionNodeSelect, disableInteractionLinkSelect, disableInteractionLinkCreate } = this.props;
     const diagramModel = diagramEngine.getDiagramModel();
-    const model = this.getMouseElement(event);
+    const model:{model: BaseModel, element: HTMLElement}|null = this.getMouseElement(event);
 
     diagramEngine.clearRepaintEntities();
 
@@ -435,7 +489,11 @@ export class DiagramWidget extends React.Component {
         deselect = true;
       } else {
         model.model.setSelected(true);
-        diagramModel.nodeSelected(model);
+
+        const __model__ = model.model;
+        if ( __model__ instanceof NodeModel ) {
+          diagramModel.nodeSelected({model: __model__, element: model.element});
+        }
       }
 
       // Get the selected items and filter out point model
@@ -468,11 +526,18 @@ export class DiagramWidget extends React.Component {
     }
   }
 
-  onMouseUp(event) {
+  onMouseUp(event:CustomMouseEvent) {
     const { diagramEngine, onChange } = this.props;
     const { action, actionType } = this.state;
     const element = this.getMouseElement(event);
-    const actionOutput = {
+    const actionOutput: {
+      type: string,
+      event?: CustomMouseEvent,
+      model?: NodeModel,
+      linkModel?: LinkModel,
+      portModel?: PortModel,
+      items?: Array<BaseModel>
+    } = {
       type: actionType
     };
 
@@ -482,7 +547,12 @@ export class DiagramWidget extends React.Component {
       actionOutput.event = event;
     } else if (action instanceof MoveItemsAction) {
       // Add the node model to the output
-      actionOutput.model = element.model;
+
+      const __model__ = element.model;
+
+      if (__model__ instanceof NodeModel) {
+        actionOutput.model = __model__;
+      }
 
       // Check if we going to connect a link to something
       action.selectionModels.forEach(model => {
@@ -493,15 +563,15 @@ export class DiagramWidget extends React.Component {
             actionOutput.type = 'point-created';
           }
 
-          if (element.model instanceof PortModel) {
+          if (__model__ instanceof PortModel) {
             // Connect the link
-            model.model.getLink().setTargetPort(element.model);
+            model.model.getLink().setTargetPort(__model__);
 
             // Link was connected to a port, update the output
             actionOutput.type = 'link-connected';
             delete actionOutput.model;
             actionOutput.linkModel = model.model.getLink();
-            actionOutput.portModel = element.model;
+            actionOutput.portModel = __model__;
           }
         }
       });
@@ -557,6 +627,10 @@ export class DiagramWidget extends React.Component {
     const style = {
       width: Math.abs(action.mouseX2 - action.mouseX),
       height: Math.abs(action.mouseY2 - action.mouseY),
+      left: 0,
+      right: 0,
+      top: 0,
+      bottom: 0
     };
 
     if ((action.mouseX2 - action.mouseX) < 0) {
