@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { NodeModel } from '../Common';
+import { NodeModel } from '../models';
 import { AbstractInstanceFactory } from '../AbstractInstanceFactory';
 
 export class DefaultNodeInstanceFactory extends AbstractInstanceFactory {

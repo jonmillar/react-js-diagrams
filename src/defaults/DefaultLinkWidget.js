@@ -1,5 +1,5 @@
 import React from 'react';
-import { PointModel } from '../Common';
+import { PointModel } from '../models';
 
 export class DefaultLinkWidget extends React.Component {
   static defaultProps = {

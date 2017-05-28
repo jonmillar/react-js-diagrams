@@ -1,4 +1,4 @@
-import { PortModel } from '../Common';
+import { PortModel } from '../models';
 import { AbstractInstanceFactory } from '../AbstractInstanceFactory';
 
 export class DefaultPortInstanceFactory extends AbstractInstanceFactory {

@@ -1,7 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
-import { DiagramModel } from '../DiagramModel';
-import { PointModel, NodeModel, LinkModel, PortModel } from '../Common';
+import { DiagramModel, PointModel, NodeModel, LinkModel, PortModel } from '../models';
 import { SelectingAction, MoveCanvasAction, MoveItemsAction } from './actions';
 import { LinkLayerWidget } from './LinkLayerWidget';
 import { NodeLayerWidget } from './NodeLayerWidget';

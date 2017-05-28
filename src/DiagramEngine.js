@@ -1,7 +1,6 @@
 import _ from 'lodash';
-import { NodeModel, PointModel } from './Common';
+import { NodeModel, PointModel, DiagramModel } from './models';
 import { BaseEntity } from './BaseEntity';
-import { DiagramModel } from './DiagramModel';
 
 /**
  * Passed as a parameter to the DiagramWidget

@@ -10,9 +10,8 @@ export * from './WidgetFactories';
 export * from './Toolkit';
 
 export * from './DiagramEngine';
-export * from './DiagramModel';
 export * from './BaseEntity';
-export * from './Common';
+export * from './models';
 export * from './AbstractInstanceFactory';
 export * from './LinkInstanceFactory';
 

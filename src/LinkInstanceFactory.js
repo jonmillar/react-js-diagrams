@@ -1,4 +1,4 @@
-import { LinkModel } from './Common';
+import { LinkModel } from './models';
 import { AbstractInstanceFactory } from './AbstractInstanceFactory';
 
 export class LinkInstanceFactory extends AbstractInstanceFactory {
