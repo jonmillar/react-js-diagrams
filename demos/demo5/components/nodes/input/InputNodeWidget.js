@@ -1,9 +1,14 @@
+/* @flow */
+
 import React from 'react';
 import * as RJD from '../../../../../src/main';
 import { InputNodeModel } from './InputNodeModel';
 
 export class InputNodeWidget extends React.Component {
-  static defaultProps = {
+  static defaultProps:{
+    node: null|{name:string},
+    color:string
+  } = {
     node: null,
     color: 'rgb(192, 255, 0)'
   };

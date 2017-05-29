@@ -1,8 +1,13 @@
+/* @flow */
+
 import _ from 'lodash';
 import * as RJD from '../../../../../src/main';
 
 export class ConnectionNodeModel extends RJD.NodeModel {
-  constructor(name = 'Untitled', color = 'rgb(224, 98, 20)') {
+  name:string;
+  color:string;
+
+  constructor(name:string = 'Untitled', color:string = 'rgb(224, 98, 20)') {
     super('connection');
     this.addPort(new RJD.DefaultPortModel(false, 'output', 'Out'));
     this.addPort(new RJD.DefaultPortModel(true, 'input', 'In'));
@@ -10,7 +15,7 @@ export class ConnectionNodeModel extends RJD.NodeModel {
     this.color = color;
   }
 
-  deSerialize(object) {
+  deSerialize(object:Object) {
     super.deSerialize(object);
     this.name = object.name;
     this.color = object.color;

@@ -1,3 +1,5 @@
+/* @flow */
+
 export * from './WhiteLinkModel';
 export * from './WhiteLinkModelFactory';
 export * from './WhiteLinkWidget';

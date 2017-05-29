@@ -1,3 +1,5 @@
+/* @flow */
+
 import React from 'react';
 import { DragWrapper } from './DragWrapper';
 import { OutputNodeWidget } from './nodes/output/OutputNodeWidget';

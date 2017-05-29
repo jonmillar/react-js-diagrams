@@ -1,3 +1,5 @@
+/* @flow */
+
 import React from 'react';
 import { DragDropContextProvider } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
@@ -10,17 +12,18 @@ import { Controls } from './components/Controls';
 import './demo5.scss';
 
 class Demo extends React.Component {
+	state = {
+		disableInteractionZoom: false,
+		disableInteractionCanvasMove: false,
+		disableInteractionNodeMove: false,
+		disableInteractionNodeSelect: false,
+		disableInteractionLinkSelect: false,
+		disableInteractionLinkCreate: false,
+		disableInteractionNodeCreate: false
+	};
+
 	constructor() {
 		super();
-		this.state = {
-			disableInteractionZoom: false,
-			disableInteractionCanvasMove: false,
-			disableInteractionNodeMove: false,
-			disableInteractionNodeSelect: false,
-			disableInteractionLinkSelect: false,
-			disableInteractionLinkCreate: false,
-			disableInteractionNodeCreate: false
-		}
 	}
 	handleChangeDisableInteractionZoom = ({ target: { checked: disableInteractionZoom } }) => {
 		this.setState({ disableInteractionZoom });

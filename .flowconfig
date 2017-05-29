@@ -5,3 +5,5 @@
 [libs]
 
 [options]
+module.name_mapper.extension='scss' -> '<PROJECT_ROOT>/flow/stub/css-modules.js'
+esproposal.decorators=ignore

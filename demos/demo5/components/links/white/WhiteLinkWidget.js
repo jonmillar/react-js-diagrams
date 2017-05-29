@@ -1,8 +1,18 @@
+/* @flow */
+
 import React from 'react';
 import { PointModel } from '../../../../../src/main';
+import type { LinkModel, DiagramEngine } from '../../../../../src/main';
 
 export class WhiteLinkWidget extends React.Component {
-  static defaultProps = {
+  static defaultProps:{
+    color: string,
+    width: number,
+    link:null|LinkModel,
+    engine: null|DiagramEngine,
+    smooth: boolean,
+    diagramEngine: null|DiagramEngine
+  } = {
     color: 'white',
     width: 3,
     link:null,
@@ -11,14 +21,15 @@ export class WhiteLinkWidget extends React.Component {
     diagramEngine: null
   };
 
-  constructor(props) {
+  state = {
+    selected: false
+  };
+
+  constructor(props:Object) {
     super(props);
-    this.state = {
-      selected: false
-    };
   }
 
-  generatePoint(pointIndex) {
+  generatePoint(pointIndex:number) {
     const { link } = this.props;
     const uiCircleProps = {
       className: `point pointui${(link.points[pointIndex].isSelected() ? ' selected' : '')}`,
@@ -46,7 +57,7 @@ export class WhiteLinkWidget extends React.Component {
     );
   }
 
-  generateLink(extraProps) {
+  generateLink(extraProps:Object) {
     const { link, width, color } = this.props;
     const { selected } = this.state;
     const bottom = (

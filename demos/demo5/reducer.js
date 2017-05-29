@@ -1,11 +1,17 @@
+/* @flow */
+
+// libs
 import undoable, { includeAction } from 'redux-undo';
+
+// src
+import { NodeModel, DiagramModel } from '../../src/main';
 
 const getInitialState = () => ({
   selectedNode: null,
   model: null
 });
 
-export const reducerFn = (state = getInitialState(), action) => {
+export const reducerFn = (state:any = getInitialState(), action:{type:string, node:?NodeModel, model:?DiagramModel, props:?Object}) => {
   switch (action.type) {
     case 'node-selected':
       return {

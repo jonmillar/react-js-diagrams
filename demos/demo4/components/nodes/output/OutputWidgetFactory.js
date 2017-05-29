@@ -1,3 +1,6 @@
+/* @flow */
+
+// src
 import * as RJD from '../../../../../src/main';
 import { OutputNodeWidgetFactory } from './OutputNodeWidget';
 
@@ -6,7 +9,7 @@ export class OutputWidgetFactory extends RJD.NodeWidgetFactory{
     super('output');
   }
 
-  generateReactWidget(diagramEngine, node) {
+  generateReactWidget(diagramEngine:RJD.DiagramEngine, node:RJD.NodeModel) {
     return OutputNodeWidgetFactory({ node });
   }
 }

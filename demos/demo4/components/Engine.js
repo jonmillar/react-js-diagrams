@@ -1,4 +1,9 @@
+/* @flow */
+
+// libs
 import React from 'react';
+
+// src
 import * as RJD from '../../../src/main';
 import { OutputWidgetFactory } from './nodes/output/OutputWidgetFactory';
 import { OutputNodeFactory } from './nodes/output/OutputInstanceFactories';

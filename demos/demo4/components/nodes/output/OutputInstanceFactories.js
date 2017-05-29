@@ -1,7 +1,8 @@
-import * as RJD from '../../../../../src/main';
+// src
+import { AbstractInstanceFactory } from '../../../../../src/AbstractInstanceFactory';
 import { OutputNodeModel } from './OutputNodeModel';
 
-export class OutputNodeFactory extends RJD.AbstractInstanceFactory {
+export class OutputNodeFactory extends AbstractInstanceFactory {
   constructor() {
     super('OutputNodeModel');
   }

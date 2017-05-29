@@ -1,4 +1,6 @@
-import { AbstractInstanceFactory } from '../../../../../src/main';
+/* @flow */
+
+import { AbstractInstanceFactory } from '../../../../../src/AbstractInstanceFactory';
 import { WhiteLinkModel } from './WhiteLinkModel';
 
 export class WhiteLinkModelFactory extends AbstractInstanceFactory {

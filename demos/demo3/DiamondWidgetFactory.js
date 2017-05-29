@@ -1,3 +1,6 @@
+/* @flow */
+
+// src
 import * as SRD from "../../src/main";
 import {DiamonNodeWidgetFactory} from "./DiamondNodeWidget";
 
@@ -6,7 +9,7 @@ export class DiamondWidgetFactory extends SRD.NodeWidgetFactory{
 		super('diamond');
 	}
 	
-	generateReactWidget(diagramEngine, node) {
+	generateReactWidget(diagramEngine:SRD.DiagramEngine, node:SRD.NodeModel) {
 		return DiamonNodeWidgetFactory({ node });
 	}
 }

@@ -1,3 +1,5 @@
+/* @flow */
+
 import React from 'react';
 import * as RJD from '../../../src/main';
 import { OutputWidgetFactory } from './nodes/output/OutputWidgetFactory';

@@ -1,8 +1,15 @@
-import * as SRD from "../../src/main";
+/* @flow */
+
+// libs
 import * as _ from "lodash";
 
+// src
+import * as SRD from "../../src/main";
+
 export class DiamondPortModel extends SRD.PortModel{
-	constructor(pos = 'top'){
+	position: string;
+
+	constructor(pos:string = 'top'){
 		super(pos);
 		this.position = pos ;
 	}
@@ -13,7 +20,7 @@ export class DiamondPortModel extends SRD.PortModel{
 		});
 	}
 	
-	deSerialize(data) {
+	deSerialize(data:Object) {
 		super.deSerialize(data);
 		this.position = data.position;
 	}

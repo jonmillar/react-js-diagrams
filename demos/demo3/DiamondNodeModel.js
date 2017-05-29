@@ -1,3 +1,6 @@
+/* @flow */
+
+// src
 import * as SRD from "../../src/main";
 import {DiamondPortModel} from "./DiamondPortModel";
 

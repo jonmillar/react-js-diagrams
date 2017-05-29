@@ -1,4 +1,9 @@
+/* @flow */
+
+// libs
 import * as React from "react";
+
+// src
 import {DiamondNodeModel} from "./DiamondNodeModel";
 import * as SRD from "../../src/main";
 

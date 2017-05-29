@@ -1,3 +1,5 @@
+/* @flow */
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
@@ -19,5 +21,7 @@ window.onload = () => {
   };
 
   render(Demo5);
+
+  // $FlowFixMe
   if (module.hot) module.hot.accept('./demo5', () => render(Demo5));
 };
