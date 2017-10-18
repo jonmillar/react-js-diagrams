@@ -186,15 +186,26 @@ export class DiagramEngine extends BaseEntity {
   getPortCenter(port:PortModel):{x:number, y:number} {
     const sourceElement = this.getNodePortElement(port);
     const sourceRect = sourceElement.getBoundingClientRect();
+    const scrollOffset = this.getScrollOffset(sourceElement)
     const rel = this.getRelativePoint(sourceRect.left,sourceRect.top);
     const x = (sourceElement.offsetWidth / 2) + rel.x / (this.diagramModel.getZoomLevel() / 100.0) -
-      this.diagramModel.getOffsetX();
+      this.diagramModel.getOffsetX() + scrollOffset.x;
     const y = (sourceElement.offsetHeight / 2) + rel.y / (this.diagramModel.getZoomLevel() / 100.0) -
-      this.diagramModel.getOffsetY();
+      this.diagramModel.getOffsetY() + scrollOffset.y;
 
     return {
       x,
       y
     };
+  }
+
+  getScrollOffset(sourceElement:HTMLElement):{x:number, y:number} {
+    const root = sourceElement.closest('.react-js-diagrams-canvas')
+
+    if ( !root ) {
+      return {x: 0, y: 0}
+    }
+
+    return {x: root.scrollLeft, y: root.scrollTop}
   }
 }

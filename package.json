@@ -26,7 +26,9 @@
   ],
   "jest": {
     "verbose": false,
-    "transform": {".*": "<rootDir>/node_modules/babel-jest"},
+    "transform": {
+      ".*": "<rootDir>/node_modules/babel-jest"
+    },
     "moduleFileExtensions": [
       "js",
       "json",
@@ -60,6 +62,7 @@
     "babel-runtime": "6.23.0",
     "cross-env": "^4.0.0",
     "css-loader": "0.26.1",
+    "enzyme": "^3.1.0",
     "eslint": "^3.19.0",
     "eslint-plugin-react": "^6.10.3",
     "express": "^4.15.2",
