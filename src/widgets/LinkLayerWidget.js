@@ -15,7 +15,7 @@ export class LinkLayerWidget extends React.Component {
         }
         // Remove the link because its problematic (TODO implement this rather at an engine level)
         catch (ex) {
-          diagramModel.removeLink(link);
+          //diagramModel.removeLink(link);
           return;
         }
       }
@@ -25,7 +25,7 @@ export class LinkLayerWidget extends React.Component {
         }
         //remove the link because its problematic (TODO implement this rather at an engine level)
         catch (ex) {
-          diagramModel.removeLink(link);
+          //diagramModel.removeLink(link);
           return;
         }
       }
