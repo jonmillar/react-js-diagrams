@@ -16,63 +16,34 @@ import { LinkLayerWidget } from './LinkLayerWidget';
 import { NodeLayerWidget } from './NodeLayerWidget';
 import { Toolkit } from '../Toolkit';
 
-import type { DiagramEngine } from '../DiagramEngine';
-import type { BaseModel } from '../models/BaseModel';
-
-type CustomMouseEvent = SyntheticMouseEvent & {
-  target: EventTarget & {
-    closest: Function
-  }
+const DEFAULT_ACTIONS = {
+  deleteItems: true,
+  selectItems: true,
+  moveItems: true,
+  multiselect: true,
+  multiselectDrag: true,
+  canvasDrag: true,
+  zoom: true,
+  copy: true,
+  paste: true,
+  selectAll: true,
+  deselectAll: true
 };
 
-type DefaultProps = {
-
-};
-
-type Props = {
-  onChange: Function,
-  makeLinkModel: Function,
-  disableInteractionZoom: boolean,
-  disableInteractionCanvasMove: boolean,
-  disableInteractionNodeMove: boolean,
-  disableInteractionNodeSelect: boolean,
-  disableInteractionLinkSelect: boolean,
-  disableInteractionLinkCreate: boolean,
-  disableInteractionNodeCreate: boolean,
-  diagramEngine: DiagramEngine
-};
-
-type State = {
-  action: null,
-  actionType: string,
-  renderedNodes: boolean,
-  windowListener: Function|null,
-  clipboard: DiagramModel|null
-};
-
-export class DiagramWidget extends React.Component<DefaultProps, Props, State> {
+export class DiagramWidget extends React.Component {
   static defaultProps = {
     onChange: () => {},
-    makeLinkModel: () => new LinkModel(),
-    disableInteractionZoom: false,
-    disableInteractionCanvasMove: false,
-    disableInteractionNodeMove: false,
-    disableInteractionNodeSelect: false,
-    disableInteractionLinkSelect: false,
-    disableInteractionLinkCreate: false,
-    disableInteractionNodeCreate: false
+    actions: DEFAULT_ACTIONS
   };
 
-  state = {
-    action: null,
-    actionType: 'unknown',
-    renderedNodes: false,
-    windowListener: null,
-    clipboard: null,
-    windowListener: null
-  };
+  getActions() {
+    if (this.props.actions === null) {
+      return {};
+    }
+    return { ...DEFAULT_ACTIONS, ...(this.props.actions || {}) };
+  }
 
-  constructor(props:Object) {
+  constructor(props) {
     super(props);
   }
 
@@ -104,6 +75,7 @@ export class DiagramWidget extends React.Component<DefaultProps, Props, State> {
     const { diagramEngine, onChange } = this.props;
     diagramEngine.setCanvas(this.refs['canvas']);
     diagramEngine.setForceUpdate(this.forceUpdate.bind(this));
+    const { selectAll, deselectAll, copy, paste, deleteItems } = this.getActions();
 
     // Add a keyboard listener
     this.setState({
@@ -113,31 +85,31 @@ export class DiagramWidget extends React.Component<DefaultProps, Props, State> {
         const ctrl = (event.metaKey || event.ctrlKey);
 
         // Select all
-        if (event.keyCode === 65 && ctrl) {
+        if (event.keyCode === 65 && ctrl && selectAll) {
           this.selectAll(true);
           event.preventDefault();
           event.stopPropagation();
         }
 
         // Deselect all
-        if (event.keyCode === 68 && ctrl) {
+        if (event.keyCode === 68 && ctrl && deselectAll) {
           this.selectAll(false);
           event.preventDefault();
           event.stopPropagation();
         }
 
         // Copy selected
-        if (event.keyCode === 67 && ctrl && selectedItems.length) {
+        if (event.keyCode === 67 && ctrl && selectedItems.length && copy) {
           this.copySelectedItems(selectedItems);
         }
 
         // Paste from clipboard
-        if (event.keyCode === 86 && ctrl && this.state.clipboard) {
+        if (event.keyCode === 86 && ctrl && this.state.clipboard && paste) {
           this.pasteSelectedItems(selectedItems);
         }
 
         // Delete all selected
-        if ([8, 46].indexOf(event.keyCode) !== -1 && selectedItems.length) {
+        if ([8, 46].indexOf(event.keyCode) !== -1 && selectedItems.length && deleteItems) {
           selectedItems.forEach(element => {
             element.remove();
           });
@@ -336,10 +308,6 @@ export class DiagramWidget extends React.Component<DefaultProps, Props, State> {
     return null;
   }
 
-  onWheel(event:WheelEvent) {
-    const { diagramEngine, disableInteractionZoom } = this.props;
-
-    if (disableInteractionZoom) return;
 
     const diagramModel = diagramEngine.getDiagramModel();
     event.preventDefault();
@@ -355,9 +323,10 @@ export class DiagramWidget extends React.Component<DefaultProps, Props, State> {
     const { action, actionType: currentActionType } = this.state;
     const diagramModel = diagramEngine.getDiagramModel();
     const { left, top } = this.refs.canvas.getBoundingClientRect();
+    const { multiselectDrag, canvasDrag, moveItems } = this.getActions();
 
     // Select items so draw a bounding box
-    if (action instanceof SelectingAction) {
+    if (action instanceof SelectingAction && multiselectDrag) {
       const relative = diagramEngine.getRelativePoint(event.pageX, event.pageY);
 
       !disableInteractionNodeSelect && _.forEach(diagramModel.getNodes(), node => {
@@ -384,7 +353,7 @@ export class DiagramWidget extends React.Component<DefaultProps, Props, State> {
       action.mouseX2 = relative.x;
       action.mouseY2 = relative.y;
       this.setState({ action, actionType: 'items-drag-selected' });
-    } else if (action instanceof MoveItemsAction) {
+    } else if (action instanceof MoveItemsAction && moveItems) {
       // Translate the items on the canvas
       action.selectionModels.forEach(model => {
         if ((model.model instanceof NodeModel && !disableInteractionNodeMove) || model.model instanceof PointModel) {
@@ -405,8 +374,6 @@ export class DiagramWidget extends React.Component<DefaultProps, Props, State> {
       }
 
       this.setState({ actionType });
-    } else if (this.state.action instanceof MoveCanvasAction) {
-      if (disableInteractionCanvasMove) return;
 
       // Translate the actual canvas
       diagramModel.setOffset(
@@ -424,14 +391,14 @@ export class DiagramWidget extends React.Component<DefaultProps, Props, State> {
   onMouseDown(event:CustomMouseEvent) {
     const { diagramEngine, disableInteractionNodeSelect, disableInteractionLinkSelect, disableInteractionLinkCreate } = this.props;
     const diagramModel = diagramEngine.getDiagramModel();
-    const model:{model: BaseModel, element: HTMLElement}|null = this.getMouseElement(event);
+
 
     diagramEngine.clearRepaintEntities();
 
     // Check if this is the canvas
     if (model === null) {
       // Check for a multiple selection
-      if (event.shiftKey) {
+      if (event.shiftKey && multiselectDrag) {
         const relative = diagramEngine.getRelativePoint(event.pageX, event.pageY);
         this.setState({
           action: new SelectingAction(
@@ -450,11 +417,13 @@ export class DiagramWidget extends React.Component<DefaultProps, Props, State> {
         });
       }
     } else if (model.model instanceof PortModel) {
+      const { linkInstanceFactory } = diagramEngine;
+
       // This is a port element, we want to drag a link
       if (disableInteractionLinkCreate) return;
 
       const relative = diagramEngine.getRelativeMousePoint(event);
-      const link = this.props.makeLinkModel();
+
       link.setSourcePort(model.model);
 
       link.getFirstPoint().updateLocation(relative);
@@ -468,12 +437,13 @@ export class DiagramWidget extends React.Component<DefaultProps, Props, State> {
         action: new MoveItemsAction(event.pageX, event.pageY, diagramEngine),
         actionType: 'link-created'
       });
-    } else {
+    } else if (selectItems) {
       // It's a direct click selection
       let deselect = false;
+      const isSelected = model.model.isSelected();
 
       // Clear selections if this wasn't a shift key or a click on a selected element
-      if (!event.shiftKey && !model.model.isSelected()) {
+      if (!event.shiftKey && !isSelected || !multiselect && !isSelected) {
         diagramModel.clearSelection(false, true);
       }
 

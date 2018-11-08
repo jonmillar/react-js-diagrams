@@ -1,26 +1,23 @@
-/* @flow */
+import * as SRD from '../../src/main';
+import { DiamondNodeModel } from './DiamondNodeModel';
+import { DiamondPortModel } from './DiamondPortModel';
 
-// src
-import { AbstractInstanceFactory } from '../../src/AbstractInstanceFactory';
-import {DiamondNodeModel} from "./DiamondNodeModel";
-import {DiamondPortModel} from "./DiamondPortModel";
+export class DiamondNodeFactory extends SRD.AbstractInstanceFactory {
+  constructor() {
+    super('DiamondNodeModel');
+  }
 
-export class DiamondNodeFactory extends AbstractInstanceFactory {
-	constructor(){
-		super("DiamondNodeModel");
-	}
-	
-	getInstance(){
-		return new DiamondNodeModel();
-	}
+  getInstance() {
+    return new DiamondNodeModel();
+  }
 }
 
-export class DiamondPortFactory extends AbstractInstanceFactory {
-	constructor(){
-		super("DiamondPortModel");
-	}
-	
-	getInstance(){
-		return new DiamondPortModel();
-	}
+export class DiamondPortFactory extends SRD.AbstractInstanceFactory {
+  constructor() {
+    super('DiamondPortModel');
+  }
+
+  getInstance() {
+    return new DiamondPortModel();
+  }
 }

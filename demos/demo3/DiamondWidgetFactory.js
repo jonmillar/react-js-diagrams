@@ -1,15 +1,12 @@
-/* @flow */
+import * as SRD from '../../src/main';
+import { DiamonNodeWidgetFactory } from './DiamondNodeWidget';
 
-// src
-import * as SRD from "../../src/main";
-import {DiamonNodeWidgetFactory} from "./DiamondNodeWidget";
-
-export class DiamondWidgetFactory extends SRD.NodeWidgetFactory{
-	constructor(){
-		super('diamond');
-	}
-	
-	generateReactWidget(diagramEngine:SRD.DiagramEngine, node:SRD.NodeModel) {
-		return DiamonNodeWidgetFactory({ node });
-	}
+export class DiamondWidgetFactory extends SRD.NodeWidgetFactory {
+  constructor() {
+    super('diamond');
+  }
+  
+  generateReactWidget(diagramEngine, node) {
+    return DiamonNodeWidgetFactory({ node });
+  }
 }

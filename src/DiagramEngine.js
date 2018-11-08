@@ -2,17 +2,7 @@
 
 // libs
 import _ from 'lodash';
-
-// src
-import { NodeModel } from './models/NodeModel';
-import { PointModel } from './models/PointModel';
-import { PortModel } from './models/PortModel';
-import { LinkModel } from './models/LinkModel';
-import { DiagramModel } from './models/DiagramModel';
-import { BaseModel } from './models/BaseModel';
-import { NodeWidget } from './widgets/NodeWidget';
-import { LinkWidget } from './widgets/LinkWidget';
-import { LinkWidgetFactory, NodeWidgetFactory } from './WidgetFactories';
+import { NodeModel, PointModel, LinkModel } from './Common';
 import { BaseEntity } from './BaseEntity';
 import { AbstractInstanceFactory } from './AbstractInstanceFactory';
 
@@ -36,6 +26,7 @@ export class DiagramEngine extends BaseEntity {
     this.nodeFactories = {};
     this.linkFactories = {};
     this.instanceFactories = {};
+    this.linkInstanceFactory = null;
     this.canvas = null;
     this.paintableWidgets = null;
     this.forceUpdate = () => {};
@@ -108,6 +99,10 @@ export class DiagramEngine extends BaseEntity {
 
   registerInstanceFactory(factory:AbstractInstanceFactory):void {
     this.instanceFactories[factory.getName()] = factory;
+    // Check for a link instance factory to be used when creating new links via drag
+    if (factory.getInstance() instanceof LinkModel) {
+      this.linkInstanceFactory = factory;
+    }
   }
 
   registerNodeFactory(factory:NodeWidgetFactory):void {
@@ -164,8 +159,6 @@ export class DiagramEngine extends BaseEntity {
     };
   }
 
-  getRelativePoint(x:number, y:number): {x:number, y:number} {
-    if ( this.canvas === null ) throw `this.canvas must not be null`;
 
     const canvasRect = this.canvas.getBoundingClientRect();
     return { x: x - canvasRect.left, y: y - canvasRect.top };

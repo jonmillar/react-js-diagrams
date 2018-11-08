@@ -1,10 +1,5 @@
-/* @flow */
-
-// libs
 import { createStore, compose, applyMiddleware } from 'redux';
-import * as createLogger from 'redux-logger';
-
-// src
+import createLogger from 'redux-logger';
 import { reducer } from './reducer';
 
 const logger = createLogger({
