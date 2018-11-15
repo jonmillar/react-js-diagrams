@@ -1,25 +1,12 @@
-/* @flow */
-
-// libs
 import _ from 'lodash';
 import { NodeModel, PointModel, LinkModel } from './Common';
 import { BaseEntity } from './BaseEntity';
-import { AbstractInstanceFactory } from './AbstractInstanceFactory';
-
-import type { DefaultNodeModel } from './defaults/DefaultNodeModel';
+import { DiagramModel } from './DiagramModel';
 
 /**
  * Passed as a parameter to the DiagramWidget
  */
 export class DiagramEngine extends BaseEntity {
-  diagramModel: DiagramModel;
-  forceUpdate: Function;
-  canvas: HTMLCanvasElement|null;
-  linkFactories: {[string]: LinkWidgetFactory};
-  nodeFactories: {[string]: NodeWidgetFactory};
-  instanceFactories: {[string]: AbstractInstanceFactory};
-  paintableWidgets: {[string]: any}|null;
-  
   constructor() {
     super();
     this.diagramModel = new DiagramModel();
@@ -32,25 +19,21 @@ export class DiagramEngine extends BaseEntity {
     this.forceUpdate = () => {};
   }
 
-  clearRepaintEntities():void {
+  clearRepaintEntities() {
     this.paintableWidgets = null;
   }
 
-  enableRepaintEntities(entities:Array<any>):void {
+  enableRepaintEntities(entities) {
     this.paintableWidgets = {};
     entities.forEach(entity => {
       // If a node is requested to repaint, add all of its links
       if (entity instanceof NodeModel) {
         _.forEach(entity.getPorts(), port => {
           _.forEach(port.getLinks(), link => {
-            if (this.paintableWidgets === null) return;
-
             this.paintableWidgets[link.getID()] = true;
           });
         });
       }
-
-      if (this.paintableWidgets === null) return;
 
       if (entity instanceof PointModel) {
         this.paintableWidgets[entity.getLink().getID()] = true;
@@ -60,7 +43,7 @@ export class DiagramEngine extends BaseEntity {
     });
   }
 
-  canEntityRepaint(baseModel:BaseModel):boolean {
+  canEntityRepaint(baseModel) {
     // No rules applied, allow repaint
     if (this.paintableWidgets === null) {
       return true;
@@ -69,35 +52,35 @@ export class DiagramEngine extends BaseEntity {
     return this.paintableWidgets[baseModel.getID()] !== undefined;
   }
 
-  setCanvas(canvas:HTMLCanvasElement|null):void {
+  setCanvas(canvas) {
     this.canvas = canvas;
   }
 
-  setDiagramModel(model:DiagramModel):void {
+  setDiagramModel(model) {
     this.diagramModel = model;
   }
 
-  setForceUpdate(forceUpdate:Function):void {
+  setForceUpdate(forceUpdate) {
     this.forceUpdate = forceUpdate;
   }
 
-  getDiagramModel():DiagramModel {
+  getDiagramModel() {
     return this.diagramModel;
   }
 
-  getNodeFactories():{[string]: NodeWidgetFactory} {
+  getNodeFactories() {
     return this.nodeFactories;
   }
 
-  getLinkFactories():{[string]: LinkWidgetFactory} {
+  getLinkFactories() {
     return this.linkFactories;
   }
 
-  getInstanceFactory(className:string):AbstractInstanceFactory {
+  getInstanceFactory(className) {
     return this.instanceFactories[className];
   }
 
-  registerInstanceFactory(factory:AbstractInstanceFactory):void {
+  registerInstanceFactory(factory) {
     this.instanceFactories[factory.getName()] = factory;
     // Check for a link instance factory to be used when creating new links via drag
     if (factory.getInstance() instanceof LinkModel) {
@@ -105,21 +88,21 @@ export class DiagramEngine extends BaseEntity {
     }
   }
 
-  registerNodeFactory(factory:NodeWidgetFactory):void {
+  registerNodeFactory(factory) {
     this.nodeFactories[factory.getType()] = factory;
     this.itterateListeners(listener => {
       listener.nodeFactoriesUpdated();
     });
   }
 
-  registerLinkFactory(factory:LinkWidgetFactory):void {
+  registerLinkFactory(factory) {
     this.linkFactories[factory.getType()] = factory;
     this.itterateListeners(listener => {
       listener.linkFactoriesUpdated();
     });
   }
 
-  getFactoryForNode(node:NodeModel):NodeWidgetFactory|null {
+  getFactoryForNode(node) {
     if (this.nodeFactories[node.getType()]) {
       return this.nodeFactories[node.getType()];
     }
@@ -127,7 +110,7 @@ export class DiagramEngine extends BaseEntity {
     return null;
   }
 
-  getFactoryForLink(link:LinkModel):LinkWidgetFactory|null {
+  getFactoryForLink(link) {
     if (this.linkFactories[link.getType()]) {
       return this.linkFactories[link.getType()];
     }
@@ -135,7 +118,7 @@ export class DiagramEngine extends BaseEntity {
     return null;
   }
 
-  generateWidgetForLink(link:LinkModel):React$Element<*> {
+  generateWidgetForLink(link) {
     const linkFactory = this.getFactoryForLink(link);
     if (!linkFactory) {
       throw `Cannot find link factory for link: ${link.getType()}`;
@@ -143,7 +126,7 @@ export class DiagramEngine extends BaseEntity {
     return linkFactory.generateReactWidget(this, link);
   }
 
-  generateWidgetForNode(node:DefaultNodeModel):React$Element<*> {
+  generateWidgetForNode(node) {
     const nodeFactory = this.getFactoryForNode(node);
     if (!nodeFactory) {
       throw `Cannot find widget factory for node: ${node.getType()}`;
@@ -151,7 +134,7 @@ export class DiagramEngine extends BaseEntity {
     return nodeFactory.generateReactWidget(this, node);
   }
 
-  getRelativeMousePoint(event:SyntheticMouseEvent) {
+  getRelativeMousePoint(event) {
     const point = this.getRelativePoint(event.pageX, event.pageY);
     return {
       x: (point.x / (this.diagramModel.getZoomLevel() / 100.0)) - this.diagramModel.getOffsetX(),
@@ -159,14 +142,12 @@ export class DiagramEngine extends BaseEntity {
     };
   }
 
-
+  getRelativePoint(x, y) {
     const canvasRect = this.canvas.getBoundingClientRect();
     return { x: x - canvasRect.left, y: y - canvasRect.top };
   }
 
-  getNodePortElement(port:PortModel):HTMLElement {
-    if ( this.canvas === null ) throw `this.canvas must not be null`;
-
+  getNodePortElement(port) {
     const selector = this.canvas.querySelector(
       `.port[data-name="${port.getName()}"][data-nodeid="${port.getParent().getID()}"]`
     );
@@ -176,29 +157,18 @@ export class DiagramEngine extends BaseEntity {
     return selector;
   }
 
-  getPortCenter(port:PortModel):{x:number, y:number} {
+  getPortCenter(port) {
     const sourceElement = this.getNodePortElement(port);
     const sourceRect = sourceElement.getBoundingClientRect();
-    const scrollOffset = this.getScrollOffset(sourceElement)
     const rel = this.getRelativePoint(sourceRect.left,sourceRect.top);
     const x = (sourceElement.offsetWidth / 2) + rel.x / (this.diagramModel.getZoomLevel() / 100.0) -
-      this.diagramModel.getOffsetX() + scrollOffset.x;
+      this.diagramModel.getOffsetX();
     const y = (sourceElement.offsetHeight / 2) + rel.y / (this.diagramModel.getZoomLevel() / 100.0) -
-      this.diagramModel.getOffsetY() + scrollOffset.y;
+      this.diagramModel.getOffsetY();
 
     return {
       x,
       y
     };
-  }
-
-  getScrollOffset(sourceElement:HTMLElement):{x:number, y:number} {
-    const root = sourceElement.closest('.react-js-diagrams-canvas')
-
-    if ( !root ) {
-      return {x: 0, y: 0}
-    }
-
-    return {x: root.scrollLeft, y: root.scrollTop}
   }
 }

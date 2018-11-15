@@ -1,10 +1,7 @@
-/* @flow */
-
-// src
-import { AbstractInstanceFactory } from '../../../../../src/AbstractInstanceFactory';
+import * as RJD from '../../../../../src/main';
 import { ConnectionNodeModel } from './ConnectionNodeModel';
 
-export class ConnectionNodeFactory extends AbstractInstanceFactory {
+export class ConnectionNodeFactory extends RJD.AbstractInstanceFactory {
   constructor() {
     super('ConnectionNodeModel');
   }

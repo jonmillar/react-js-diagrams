@@ -1,5 +1,3 @@
-/* @flow */
-
 export * from './defaults/DefaultLinkFactory';
 export * from './defaults/DefaultLinkWidget';
 export * from './defaults/DefaultNodeFactory';
@@ -12,8 +10,9 @@ export * from './WidgetFactories';
 export * from './Toolkit';
 
 export * from './DiagramEngine';
+export * from './DiagramModel';
 export * from './BaseEntity';
-export * from './models';
+export * from './Common';
 export * from './AbstractInstanceFactory';
 export * from './LinkInstanceFactory';
 

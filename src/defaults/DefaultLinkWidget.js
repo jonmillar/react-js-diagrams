@@ -1,32 +1,7 @@
-/* @flow */
-
-// libs
 import React from 'react';
+import { PointModel } from '../Common';
 
-// src
-import { PointModel } from '../models/PointModel';
-import { DiagramEngine } from '../DiagramEngine';
-import type { LinkModel } from '../models/LinkModel';
-
-type DefaultProps = {
-
-};
-
-type Props = {
-  color?: string,
-  width?: number,
-  link: LinkModel,
-  engine?: DiagramEngine,
-  smooth?: boolean,
-  diagramEngine: DiagramEngine,
-  pointAdded?: Function
-};
-
-type State = {
-  selected: boolean
-};
-
-export class DefaultLinkWidget extends React.Component<DefaultProps, Props, State> {
+export class DefaultLinkWidget extends React.Component {
   static defaultProps = {
     color: 'black',
     width: 3,
@@ -36,15 +11,14 @@ export class DefaultLinkWidget extends React.Component<DefaultProps, Props, Stat
     diagramEngine: null
   };
 
-  state = {
-    selected: false
-  };
-
-  constructor(props:Object) {
+  constructor(props) {
     super(props);
+    this.state = {
+      selected: false
+    };
   }
 
-  generatePoint(pointIndex:number):React$Element<*> {
+  generatePoint(pointIndex) {
     const { link } = this.props;
     const uiCircleProps = {
       className: `point pointui${(link.points[pointIndex].isSelected() ? ' selected' : '')}`,
@@ -72,7 +46,7 @@ export class DefaultLinkWidget extends React.Component<DefaultProps, Props, Stat
     );
   }
 
-  generateLink(extraProps:Object):React$Element<*> {
+  generateLink(extraProps) {
     const { link, width, color } = this.props;
     const { selected } = this.state;
     const bottom = (
@@ -81,6 +55,10 @@ export class DefaultLinkWidget extends React.Component<DefaultProps, Props, Stat
         strokeWidth={width}
         stroke={color}
         {...extraProps}
+        style={{
+          fill: 'none',
+          pointerEvents: 'all',
+        }}
       />
     );
 
@@ -96,6 +74,10 @@ export class DefaultLinkWidget extends React.Component<DefaultProps, Props, Stat
         onContextMenu={event => {
           event.preventDefault();
           this.props.link.remove();
+        }}
+        style={{
+          fill: 'none',
+          pointerEvents: 'all',
         }}
         {...extraProps}
       />
@@ -135,7 +117,7 @@ export class DefaultLinkWidget extends React.Component<DefaultProps, Props, Stat
           point.setSelected(true);
           this.forceUpdate();
           link.addPoint(point, 1);
-          pointAdded && pointAdded(point, event);
+          pointAdded(point, event);
         }
       },
       d: ` M${pointLeft.x} ${pointLeft.y} C${pointLeft.x + margin} ${pointLeft.y} ${pointRight.x - margin} ${pointRight.y} ${pointRight.x} ${pointRight.y}` // eslint-disable-line
@@ -183,7 +165,7 @@ export class DefaultLinkWidget extends React.Component<DefaultProps, Props, Stat
           point.setSelected(true);
           this.forceUpdate();
           link.addPoint(point, index + 1);
-          pointAdded && pointAdded(point, event);
+          pointAdded(point, event);
         }
       }
     }));

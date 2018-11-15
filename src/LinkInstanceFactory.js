@@ -1,7 +1,4 @@
-/* @flow */
-
-// src
-import { LinkModel } from './models/LinkModel';
+import { LinkModel } from './Common';
 import { AbstractInstanceFactory } from './AbstractInstanceFactory';
 
 export class LinkInstanceFactory extends AbstractInstanceFactory {
@@ -9,7 +6,7 @@ export class LinkInstanceFactory extends AbstractInstanceFactory {
     super('LinkModel');
   }
   
-  getInstance():LinkModel {
+  getInstance() {
     return new LinkModel();
   }
 }

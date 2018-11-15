@@ -1,11 +1,6 @@
-/* @flow */
-
-// libs
 import React from 'react';
 import _ from 'lodash';
 import { DropTarget } from 'react-dnd';
-
-// src
 import * as RJD from '../../../src/main';
 import { OutputNodeModel } from './nodes/output/OutputNodeModel';
 import { InputNodeModel } from './nodes/input/InputNodeModel';
@@ -25,12 +20,13 @@ const nodesTarget = {
     const item = monitor.getItem();
 
     let node;
-
     if (item.type === 'output') {
       node = new OutputNodeModel('Output Node');
-    } else if (item.type === 'input') {
+    }
+    if (item.type === 'input') {
       node = new InputNodeModel('Input Node');
-    } else {
+    }
+    if (item.type === 'connection') {
       node = new ConnectionNodeModel('Connection Node', item.color);
     }
 
@@ -54,13 +50,13 @@ export class Diagram extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps:Object) {
+  componentWillReceiveProps(nextProps) {
     if (!_.isEqual(this.props.model, nextProps.model)) {
       this.setModel(nextProps.model);
     }
   }
 
-  setModel(model:Object) {
+  setModel(model) {
     diagramModel = new RJD.DiagramModel();
     if (model) {
       diagramModel.deSerializeDiagram(model, diagramEngine);
@@ -68,7 +64,7 @@ export class Diagram extends React.Component {
 	  diagramEngine.setDiagramModel(diagramModel);
   }
 
-  onChange(model:RJD.DiagramModel, action:Object) {
+  onChange(model, action) {
     console.log('ON DIAGRAM CHANGE');
     console.log(action);
 

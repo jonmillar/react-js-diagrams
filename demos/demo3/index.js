@@ -1,10 +1,5 @@
-/* @flow */
-
-// libs
 import React from 'react';
 import ReactDOM from 'react-dom';
-
-// src
 import * as RJD from '../../src/main';
 import { DiamondNodeModel } from './DiamondNodeModel';
 import { DiamondWidgetFactory } from './DiamondWidgetFactory';
@@ -18,9 +13,6 @@ import '../test.scss';
  *
  */
 class Demo3 extends React.Component {
-  engine: RJD.DiagramEngine;
-  model: RJD.DiagramModel;
-  
   constructor(props) {
     super(props);
 

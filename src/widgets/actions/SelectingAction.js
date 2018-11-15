@@ -1,20 +1,13 @@
-/* @flow */
-
-// src
 import { BaseAction } from './BaseAction';
-import type { DiagramModel } from '../../models/DiagramModel';
 
 export class SelectingAction extends BaseAction {
-  mouseX2: number;
-  mouseY2: number;
-
-  constructor(mouseX:number, mouseY:number) {
+  constructor(mouseX, mouseY) {
     super(mouseX, mouseY);
     this.mouseX2 = mouseX;
     this.mouseY2 = mouseY;
   }
 
-  containsElement(x:number, y:number, diagramModel:DiagramModel) {
+  containsElement(x, y, diagramModel) {
     const { mouseX, mouseX2, mouseY, mouseY2 } = this;
     const z = diagramModel.getZoomLevel() / 100;
     const elX = (x + diagramModel.getOffsetX()) * z;

@@ -1,12 +1,7 @@
-/* @flow */
-
-// libs
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 import { Provider } from 'react-redux';
-
-// src
 import { store } from './store';
 import { Demo4 } from './demo4';
 
@@ -24,6 +19,5 @@ window.onload = () => {
   };
 
   render(Demo4);
-  // $FlowFixMe
   if (module.hot) module.hot.accept('./demo4', () => render(Demo4));
 };

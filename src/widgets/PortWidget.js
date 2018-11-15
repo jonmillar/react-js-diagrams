@@ -1,33 +1,11 @@
-/* @flow */
-
-// libs
 import React from 'react';
 
-// src
-import type { NodeModel } from '../models/NodeModel';
-
-type DefaultProps = {};
-
-type Props = {
-  name: string,
-  node: NodeModel
-};
-
-
-type State = {
-  selected: boolean
-};
-
-export class PortWidget extends React.Component<DefaultProps, Props, State> {
-  static defaultProps = {
-  };
-
-  state = {
-    selected: false
-  };
-
-  constructor(props:Props) {
+export class PortWidget extends React.Component {
+  constructor(props) {
     super(props);
+    this.state = {
+      selected: false
+    };
   }
 
   render() {

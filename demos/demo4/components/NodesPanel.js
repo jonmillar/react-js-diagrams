@@ -1,9 +1,4 @@
-/* @flow */
-
-// libs
 import React from 'react';
-
-// src
 import { DragWrapper } from './DragWrapper';
 import { OutputNodeWidget } from './nodes/output/OutputNodeWidget';
 import { InputNodeWidget } from './nodes/input/InputNodeWidget';

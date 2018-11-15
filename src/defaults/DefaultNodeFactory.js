@@ -1,20 +1,13 @@
-/* @flow */
-
-// libs
 import React from 'react';
-
-// src
 import { NodeWidgetFactory } from '../WidgetFactories';
 import { DefaultNodeWidget } from './DefaultNodeWidget';
-import type { DiagramEngine } from '../DiagramEngine'
-import type { DefaultNodeModel } from './DefaultNodeModel'
 
 export class DefaultNodeFactory extends NodeWidgetFactory {
   constructor() {
     super('default');
   }
 
-  generateReactWidget(diagramEngine:DiagramEngine, node:DefaultNodeModel) {
+  generateReactWidget(diagramEngine, node) {
     return (
       <DefaultNodeWidget node={node} diagramEngine={diagramEngine} />
     );

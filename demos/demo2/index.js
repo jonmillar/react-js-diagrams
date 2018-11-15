@@ -1,10 +1,5 @@
-/* @flow */
-
-// libs
 import React from 'react';
 import ReactDOM from 'react-dom';
-
-// src
 import * as RJD from '../../src/main';
 import '../test.scss';
 
@@ -16,9 +11,6 @@ import '../test.scss';
  * @Author Dylan Vorster
  */
 class Demo2 extends React.Component {
-  engine: RJD.DiagramEngine;
-  model: RJD.DiagramModel;
-  
   constructor(props) {
     super(props);
 

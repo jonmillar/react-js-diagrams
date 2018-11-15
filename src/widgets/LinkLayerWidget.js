@@ -1,10 +1,5 @@
-/* @flow */
-
-// libs
 import React from 'react';
 import _ from 'lodash';
-
-// src
 import { LinkWidget } from './LinkWidget';
 
 export class LinkLayerWidget extends React.Component {
@@ -63,7 +58,12 @@ export class LinkLayerWidget extends React.Component {
     const svgStyle = {
       transform: `scale(${zoom / 100.0}) translate(${offsetX}px, ${offsetY}px)`,
       width: '100%',
-      height: '100%'
+      height: '100%',
+      position: 'absolute',
+      height: '100%',
+      width: '100%',
+      transformOrigin: '0 0',
+      overflow: 'visible',
     };
 
     return (

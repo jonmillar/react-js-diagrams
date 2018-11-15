@@ -1,16 +1,6 @@
-/* @flow */
-
-// src
 import { Toolkit } from './Toolkit';
 
-type Listener = {
-
-}
-
 export class BaseEntity {
-  id: string;
-  listeners: {[string]: Listener}
-
   constructor() {
     this.listeners = {};
     this.id = Toolkit.UID();
@@ -24,7 +14,7 @@ export class BaseEntity {
     this.listeners = {};
   }
 
-  deSerialize(data:{id:string}) {
+  deSerialize(data) {
     this.id = data.id;
   }
 
@@ -34,13 +24,13 @@ export class BaseEntity {
     };
   }
 
-  itterateListeners(cb:Function) {
+  itterateListeners(cb) {
     for (const key in this.listeners) {
       cb(this.listeners[key]);
     }
   }
 
-  removeListener(listener:string) {
+  removeListener(listener) {
     if (this.listeners[listener]) {
       delete this.listeners[listener];
       return true;
@@ -48,7 +38,7 @@ export class BaseEntity {
     return false;
   }
 
-  addListener(listener:Listener) {
+  addListener(listener) {
     const uid = Toolkit.UID();
     this.listeners[uid] = listener;
     return uid;

@@ -1,39 +1,11 @@
-/* @flow */
-
-// libs
 import React from 'react';
-
-// src
 import { DefaultPortLabel } from './DefaultPortLabelWidget';
-import type { DefaultNodeModel } from './DefaultNodeModel';
-import type { DiagramEngine } from '../DiagramEngine';
 
-type DefaultProps = {
-
-};
-
-type Props = {
-  node: DefaultNodeModel,
-  diagramEngine: DiagramEngine
-};
-
-type State = {
-
-};
-
-export class DefaultNodeWidget extends React.Component<DefaultProps, Props, State> {
+export class DefaultNodeWidget extends React.Component {
   static defaultProps = {
     node: null,
   };
 
-  state = {
-
-  };
-  
-  constructor(props:Object) {
-    super(props);
-  }
-  
   onRemove() {
     const { node, diagramEngine } = this.props;
     node.remove();

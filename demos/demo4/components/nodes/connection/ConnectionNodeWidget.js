@@ -1,16 +1,9 @@
-/* @flow */
-
-// libs
 import React from 'react';
-
-// src
 import * as RJD from '../../../../../src/main';
 import { ConnectionNodeModel } from './ConnectionNodeModel';
 
 export class ConnectionNodeWidget extends React.Component {
-  static defaultProps: {
-    node: {name: string}|null
-  } = {
+  static defaultProps = {
     node: null,
     color: 'rgb(224, 98, 20)'
   };

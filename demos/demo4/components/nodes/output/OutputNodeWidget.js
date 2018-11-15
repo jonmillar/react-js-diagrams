@@ -1,16 +1,9 @@
-/* @flow */
-
-// libs
 import React from 'react';
-
-// src
 import * as RJD from '../../../../../src/main';
 import { OutputNodeModel } from './OutputNodeModel';
 
 export class OutputNodeWidget extends React.Component {
-  static defaultProps:{
-    node: {name:string}|null
-  } = {
+  static defaultProps = {
     node: null,
     color: 'rgb(0, 192, 255)'
   };
