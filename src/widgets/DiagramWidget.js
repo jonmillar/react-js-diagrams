@@ -106,15 +106,6 @@ export class DiagramWidget extends React.Component {
           this.pasteSelectedItems(selectedItems);
         }
 
-        // Delete all selected
-        if ([8, 46].indexOf(event.keyCode) !== -1 && selectedItems.length && deleteItems) {
-          selectedItems.forEach(element => {
-            element.remove();
-          });
-
-          onChange(diagramEngine.getDiagramModel().serializeDiagram(), { type: 'items-deleted', items: selectedItems });
-          this.forceUpdate();
-        }
       })
     });
     window.focus();
@@ -299,17 +290,19 @@ export class DiagramWidget extends React.Component {
   }
 
   onWheel(event) {
-    const { diagramEngine } = this.props;
-    const actions = this.getActions();
-    if (!actions.zoom) {
-      return;
-    }
-    const diagramModel = diagramEngine.getDiagramModel();
-    event.preventDefault();
-    event.stopPropagation();
-    diagramModel.setZoomLevel(diagramModel.getZoomLevel() + (event.deltaY / 60));
-    diagramEngine.enableRepaintEntities([]);
-    this.forceUpdate();
+    // Remove scroll zoom
+
+    // const { diagramEngine } = this.props;
+    // const actions = this.getActions();
+    // if (!actions.zoom) {
+    //   return;
+    // }
+    // const diagramModel = diagramEngine.getDiagramModel();
+    // event.preventDefault();
+    // event.stopPropagation();
+    // diagramModel.setZoomLevel(diagramModel.getZoomLevel() + (event.deltaY / 60));
+    // diagramEngine.enableRepaintEntities([]);
+    // this.forceUpdate();
   }
 
   onMouseMove(event) {
