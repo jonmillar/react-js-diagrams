@@ -179,6 +179,5 @@ export class DiagramEngine extends BaseEntity {
 
 		this.diagramModel.setZoomLevel(this.diagramModel.getZoomLevel() * zoomFactor);
 		this.diagramModel.setOffset(0, 0);
-		this.repaintCanvas();
 	}
 }
