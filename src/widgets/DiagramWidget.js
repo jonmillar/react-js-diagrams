@@ -106,9 +106,26 @@ export class DiagramWidget extends React.Component {
           this.pasteSelectedItems(selectedItems);
         }
 
+        // Delete all selected
+        if ([8, 46].indexOf(event.keyCode) !== -1 && selectedItems.length) {
+          this.deleteItems(selectedItems);
+        }
+
       })
     });
     window.focus();
+  }
+
+  deleteItems(selectedItems) {
+    const { diagramEngine, onChange } = this.props;
+    selectedItems.forEach(element => {
+      element.remove();
+    });
+
+    onChange(diagramEngine.getDiagramModel().serializeDiagram(),
+          {type: 'items-deleted', items: selectedItems});
+
+    this.forceUpdate()
   }
 
   copySelectedItems(selectedItems) {
