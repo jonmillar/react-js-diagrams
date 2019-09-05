@@ -1,9 +1,9 @@
 {
-  "name": "react-js-diagrams",
-  "version": "3.1.10",
+  "name": "react-js-diagrams-modified",
+  "version": "1.0.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jonmillar/react-js-diagrams.git"
+    "url": "https://github.com/naki30/react-js-diagrams.git"
   },
   "scripts": {
     "start": "node_modules/.bin/babel-node server.js --presets es2015,es2016,es2017,stage-0",
@@ -27,7 +27,7 @@
   "main": "lib/main.js",
   "module": "es/index.js",
   "jsnext:main": "es/index.js",
-  "author": "Jeff Wooden <woodenconsulting@gmail.com>",
+  "author": "Naval Kishore <navalkishoregr@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "lodash": "4.17.4"
