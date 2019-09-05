@@ -6,7 +6,7 @@ module.exports = [{
     filename: 'main.js',
     path: path.join(__dirname, 'dist'),
     publicPath: '/dist/',
-    library: 'react-js-diagrams'
+    library: 'react-js-diagrams-modified'
   },
   module: {
     rules: [
