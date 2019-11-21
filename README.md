@@ -10,11 +10,11 @@ A React diagramming libary using lodash as its only additional dependency. Initi
 ## How To Install
 
 ```
-npm install --save react-js-diagrams
+npm install --save react-js-diagrams-modified
 ```
 or
 ```
-yarn add react-js-diagrams
+yarn add react-js-diagrams-modified
 ```
 
 The above assumes that you are using [npm](http://npmjs.com/) with a module bundler like [Webpack](http://webpack.github.io/) or [Browserify](http://browserify.org/) in order to consume [CommonJS modules](http://webpack.github.io/docs/commonjs.html).

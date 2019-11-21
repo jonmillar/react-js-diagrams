@@ -48,6 +48,7 @@ export class DiagramWidget extends React.Component {
   componentWillUnmount() {
     this.props.diagramEngine.setCanvas(null);
     window.removeEventListener('keydown', this.state.windowListener);
+    window.removeEventListener("click", this.state.windowClickListner);
   }
 
   componentWillUpdate(nextProps) {
@@ -105,10 +106,29 @@ export class DiagramWidget extends React.Component {
         if (event.keyCode === 86 && ctrl && this.state.clipboard && paste) {
           this.pasteSelectedItems(selectedItems);
         }
+      }),
+      windowClickListener: window.addEventListener('click', function(event) {
+        var selectedItems = diagramEngine.getDiagramModel().getSelectedItems();
 
+        // Delete all selected
+        if (event.target.classList.contains('deleteAppBtn') && selectedItems.length) {
+          _this2.deleteItems(selectedItems);
+        }
       })
     });
     window.focus();
+  }
+
+  deleteItems(selectedItems) {
+    const { diagramEngine, onChange } = this.props;
+    selectedItems.forEach(element => {
+      element.remove();
+    });
+
+    onChange(diagramEngine.getDiagramModel().serializeDiagram(),
+          {type: 'items-deleted', items: selectedItems});
+
+    this.forceUpdate()
   }
 
   copySelectedItems(selectedItems) {
